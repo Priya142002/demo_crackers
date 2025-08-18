@@ -137,7 +137,7 @@ const Footer = () => {
 
 // === Footer Styles ===
 const footerStyle = {
-  backgroundColor: '#1a237e',
+  backgroundColor: '#541354',
   color: 'white',
   padding: '3rem 2rem 1rem',
 };
@@ -244,7 +244,7 @@ const sendIconStyle = {
 };
 
 const copyrightStyle = {
-  borderTop: '1px solid #3949AB',
+  borderTop: '1px solid #541354',
   padding: '1.5rem 0',
   textAlign: 'center',
  
@@ -272,7 +272,7 @@ const footerBottomLinkStyle = {
 };
 
 const dividerStyle = {
-  color: '#3949AB',
+  color: '#541354',
 };
 
 // Add hover effects using external CSS (recommended) or emotion/styled-components for full :hover support

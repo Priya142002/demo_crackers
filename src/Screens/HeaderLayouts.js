@@ -2,42 +2,27 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/Cmp_logo10.jpg";
-import { FiFacebook, FiInstagram, FiTwitter, FiLinkedin, FiMenu, FiX, FiDownload } from "react-icons/fi";
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
-import axios from 'axios';
-import localforage from 'localforage';
-import API_BASE_URL from "./apiConfig";
+import { FiMenu, FiX, FiDownload } from "react-icons/fi";
 import priceListPdf from "../assets/SriGokilaa_pricelist.pdf";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Toggle mobile menu
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Close mobile menu when clicking on a link
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
 
-
-const openPriceListPDF = (e) => {
-  e.preventDefault();
-  window.open(priceListPdf, '_blank'); // Opens PDF in new tab
-};
-
   // Inject mobile CSS
-  React.useEffect(() => {
+  useEffect(() => {
     const style = document.createElement('style');
     style.textContent = mobileCSS;
     document.head.appendChild(style);
     return () => {
-      if (document.head.contains(style)) {
-        document.head.removeChild(style);
-      }
+      document.head.removeChild(style);
     };
   }, []);
 
@@ -47,12 +32,8 @@ const openPriceListPDF = (e) => {
         <img src={logo} style={logoStyle} alt="Sri Gokilaa Crackers" />
       </div>
 
-      {/* Hamburger Menu Button - Only visible on mobile */}
-      <button 
-        className="hamburger-button"
-        onClick={toggleMobileMenu}
-        style={hamburgerButtonStyle}
-      >
+      {/* Hamburger Menu */}
+      <button className="hamburger-button" onClick={toggleMobileMenu} style={hamburgerButtonStyle}>
         {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
       </button>
 
@@ -67,24 +48,22 @@ const openPriceListPDF = (e) => {
           <li style={navItemStyle}>
             <NavLink to="/product" onClick={closeMobileMenu}>Purchase Order</NavLink>
           </li>
-          
           <li style={navItemStyle}>
             <NavLink to="/quick-purchase" onClick={closeMobileMenu} special="quick">Quick Order</NavLink>
           </li>
-         
-           <li style={navItemStyle}>
-          <a 
-  href={priceListPdf} 
-  target="_blank" 
-  rel="noopener noreferrer"
-  download="Sri_Gokilaa_Crackers_Price_List.pdf"
-  style={priceListLinkStyle}
-  onClick={closeMobileMenu}
->
- Download PriceList
-</a>
+          <li style={navItemStyle}>
+            <a
+              href={priceListPdf}
+              target="_blank"
+              rel="noopener noreferrer"
+              download="Sri_Gokilaa_Crackers_Price_List.pdf"
+              style={priceListLinkStyle}
+              onClick={closeMobileMenu}
+            >
+              <FiDownload size={16} /> Download PriceList
+            </a>
           </li>
-           <li style={navItemStyle}>
+          <li style={navItemStyle}>
             <NavLink to="/safety" onClick={closeMobileMenu}>Safety Tips</NavLink>
           </li>
           <li style={{ ...navItemStyle, marginTop: '10px' }}>
@@ -98,26 +77,20 @@ const openPriceListPDF = (e) => {
   );
 };
 
-// Reusable NavLink — NO HOVER EFFECT
+// Reusable NavLink
 const NavLink = ({ to, children, onClick, special }) => {
-  const baseStyle = special === "quick"
-    ? quickOrderStyle
-    : navLinkStyle;
+  const baseStyle = special === "quick" ? quickOrderStyle : navLinkStyle;
 
   return (
-    <Link
-      to={to}
-      style={baseStyle}  // Always use base style
-      onClick={onClick}
-      // Removed: onMouseEnter, onMouseLeave
-    >
+    <Link to={to} style={baseStyle} onClick={onClick}>
       {children}
     </Link>
   );
 };
-// === Styles === 
+
+// === STYLES ===
 const headerStyle = {
-  background: 'rgb(26, 35, 126)',
+  background: '#541354',
   padding: '0.5rem 2rem',
   display: 'flex',
   alignItems: 'center',
@@ -129,30 +102,21 @@ const headerStyle = {
 };
 
 const quickOrderStyle = {
+  background: 'linear-gradient(90deg, #FFD700, #FF4500, #FFD700)',
+  backgroundSize: '200% 200%',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  fontWeight: 'bold',
+  fontSize: '1rem',
   padding: '0.5rem 1rem',
-  background: 'linear-gradient(135deg, #ff9800, #f57c00)',
-  color: '#fff',
-  textDecoration: 'none',
-  borderRadius: '20px',
-  fontWeight: '600',
- fontSize: '0.9rem',
-  border: '2px solid #ff9800',
-  boxShadow: '0 4px 10px rgba(255, 152, 0, 0.4)',
-  transition: 'none', // Removed transition to prevent conflicts with animation
+  borderRadius: '8px',
   display: 'inline-block',
-  verticalAlign: 'middle',
-  margin: '0',
-  animation: 'quickOrderBlink 2s infinite ease-in-out',
-  animationFillMode: 'forwards',
-}
+  animation: 'slideBackAndForth 2s ease-in-out infinite alternate', // ← Smooth slide
+  cursor: 'pointer',
+  position: 'relative',
+  overflow: 'hidden',
+};
 
-const quickOrderHoverStyle = {
-  // Animation overrides hover, but keep for fallback
-  background: '#ff6e1b',
-  boxShadow: '0 6px 16px rgba(255, 152, 0, 0.6)',
-  transform: 'scale(1.1)', // Slightly bigger on hover
-  animationPlayState: 'paused', // Pause animation on hover to see hover effect
-}
 
 const logoContainerStyle = {
   display: 'flex',
@@ -161,13 +125,13 @@ const logoContainerStyle = {
 };
 
 const logoStyle = {
-  height: '50px',               
-  width: '50px',              
-  borderRadius: '50%',          
-  objectFit: 'cover',           // Zoom and fill the circle
-  border: '3px solid #FF9800',  // Visible border
-  backgroundColor: '#fff',      // Optional background
-  overflow: 'hidden' 
+  height: '50px',
+  width: '50px',
+  borderRadius: '50%',
+  objectFit: 'cover',
+  border: '3px solid #FF9800',
+  backgroundColor: '#fff',
+  overflow: 'hidden',
 };
 
 const navListStyle = {
@@ -183,38 +147,39 @@ const navItemStyle = {
   borderRadius: '30px',
   overflow: 'visible',
   transition: 'all 0.3s ease',
-  fontsize: '1rem',
+  fontSize: '1rem', // Fixed typo: 'fontsize' → 'fontSize'
 };
 
 const navLinkStyle = {
   color: '#ffffff',
-  textDecoration: 'none', // Remove any default underline
- fontWeight: 'bold',
+  textDecoration: 'none',
+  fontWeight: 'bold',
   fontSize: '1rem',
   padding: '0.5rem 1rem',
   borderRadius: '8px',
   transition: 'color 0.3s ease',
-  outline: 'none', // Remove focus outline
+  outline: 'none',
 };
 
 const loginnavLinkStyle = {
- padding: '0.5rem 1rem',
-  background: 'linear-gradient(135deg, #ff512f, #dd2476)',
-  color: '#fff',
+  padding: '0.4rem 0.8rem',        // Reduced padding
+  background: 'transparent',
+  color: '#FFD700',
   textDecoration: 'none',
-  borderRadius: '10px',
+  borderRadius: '18px',             // Slightly smaller radius
   fontWeight: 'bold',
-  fontSize: '1rem',
-  transition: 'all 0.4s ease',
-  boxShadow: '0 0 10px #ff512f88',
-  animation: 'pulseGlow 2s infinite',
-  margin: '10px 0',
+  fontSize: '0.95rem',              // Slightly smaller font
+  border: '1px solid #FFD700',
+  transition: 'all 0.3s ease',
+  display: 'inline-block',
+  boxShadow: '0 0 8px rgba(255, 215, 0, 0.3)',
+  animation: 'pulseGold 2.5s infinite alternate',
+  margin: '8px 0',                  // Reduced margin
 };
-
 
 const hamburgerButtonStyle = {
   display: 'none',
-  background: 'rgb(26, 35, 126)',
+ background: '#541354',
   color: 'white',
   border: 'none',
   padding: '0.5rem',
@@ -223,6 +188,7 @@ const hamburgerButtonStyle = {
   transition: 'all 0.3s ease',
   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
 };
+
 const priceListLinkStyle = {
   color: '#ffffff',
   textDecoration: 'none',
@@ -235,55 +201,48 @@ const priceListLinkStyle = {
   alignItems: 'center',
   gap: '0.3rem',
 };
-// Mobile CSS with consistent desktop styling
+
+// === CSS IN JS (Animations & Mobile) ===
 const mobileCSS = `
-@keyframes quickOrderBlink {
+@keyframes slideBackAndForth {
   0% {
-    opacity: 0.8;
-    transform: scale(1) translateY(0px);
-    box-shadow: 0 4px 10px rgba(255, 152, 0, 0.4), 0 0 20px rgba(255, 152, 0, 0.3);
-    background: linear-gradient(135deg, #ff9800, #f57c00);
-  }
-  25% {
-    opacity: 1;
-    transform: scale(1.08) translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 152, 0, 0.9), 0 0 50px rgba(255, 152, 0, 0.7);
-    background: linear-gradient(135deg, #ffb74d, #ff8f00);
+    transform: translateX(0);
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
   }
   50% {
-    opacity: 0.7;
-    transform: scale(0.98) translateY(1px);
-    box-shadow: 0 3px 8px rgba(255, 152, 0, 0.3), 0 0 15px rgba(255, 152, 0, 0.2);
-    background: linear-gradient(135deg, #ff6f00, #e65100);
-  }
-  75% {
-    opacity: 1;
-    transform: scale(1.05) translateY(-1px);
-    box-shadow: 0 6px 18px rgba(255, 152, 0, 0.7), 0 0 35px rgba(255, 152, 0, 0.5);
-  background: 'linear-gradient(135deg, #ffd54f, #ffb74d)', // Lighter orange shades
-
+    transform: translateX(6px);
+    text-shadow: 0 0 8px rgba(255, 69, 0, 0.6);
   }
   100% {
-    opacity: 0.8;
-    transform: scale(1) translateY(0px);
-    box-shadow: 0 4px 10px rgba(255, 152, 0, 0.4), 0 0 20px rgba(255, 152, 0, 0.3);
-    background: 'linear-gradient(135deg, #ffd54f, #ffb74d)', // Lighter orange shades
-
+    transform: translateX(-6px);
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
   }
 }
 
-@keyframes pulseGlow {
+@keyframes pulseGold {
   0% {
-    box-shadow: 0 0 12px #ff512f88, 0 0 24px #ff512f44;
+    color: #FFD700;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+    transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 20px #ff512fcc, 0 0 36px #ff512f88;
+    color: #FFA500;
+    box-shadow: 0 0 14px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 165, 0, 0.5);
+    transform: scale(1.05);
   }
   100% {
-    box-shadow: 0 0 12px #ff512f88, 0 0 24px #ff512f44;
+    color: #FFD700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    transform: scale(1);
   }
 }
-
+a[href="/AdminLogin"]:hover,
+.nav-list-mobile a[href="/AdminLogin"]:hover {
+  background: rgba(255, 215, 0, 0.1);
+  color: #FFA500 !important;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 0 25px rgba(255, 165, 0, 0.5);
+  transform: scale(1.05); /* Smaller scale on hover */
+}
 /* Desktop - hide hamburger */
 @media (min-width: 769px) {
   .hamburger-button {
@@ -291,14 +250,14 @@ const mobileCSS = `
   }
 }
 
-/* Mobile Layout - Same styling as desktop */
+/* Mobile Layout */
 @media (max-width: 768px) {
   .header-mobile {
     flex-direction: row;
-    padding: 0.5rem 1rem; /* Reduced padding for mobile */
+    padding: 0.5rem 1rem;
     justify-content: space-between;
     align-items: center;
-    background: rgb(26, 35, 126); /* Same as desktop */
+    background: #563c5c;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -309,8 +268,8 @@ const mobileCSS = `
     display: flex !important;
     align-items: center;
     justify-content: center;
-    background: rgb(26, 35, 126); /* Same as desktop header background */
-    border: 2px solid #FF9800; /* Orange border like logo */
+    background: #563c5c;
+    border: 2px solid #FF9800;
     color: #FF9800;
     border-radius: 8px;
     padding: 0.5rem;
@@ -323,13 +282,12 @@ const mobileCSS = `
     transform: scale(1.1);
   }
 
-  /* Nav positioned below header with desktop styling */
   .nav-mobile {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background: rgb(26, 35, 126); /* Same as desktop header */
+    background: #563c5c;
     border-top: 1px solid rgba(255, 152, 0, 0.3);
     opacity: 0;
     visibility: hidden;
@@ -349,87 +307,49 @@ const mobileCSS = `
   .nav-list-mobile {
     flex-direction: column;
     align-items: center;
-    gap: 1rem; /* Same as desktop */
+    gap: 1rem;
     padding: 2rem 1rem;
     margin: 0;
     list-style: none;
   }
 
-  .nav-list-mobile li {
-    border-radius: 30px; /* Same as desktop */
-    overflow: visible;
-    transition: all 0.3s ease;
-  }
-
-.nav-list-mobile a {
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1.2rem;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  transition: color 0.3s ease;
-  display: block;
-  text-align: center;
-  outline: none; /* ✅ Remove focus outline */
-}
-
-.nav-list-mobile a:focus,
-.nav-list-mobile a:active {
-  outline: none !important; /* Remove focus outline */
-  box-shadow: none !important; /* Remove any shadow effects */
-  text-decoration: none !important; /* Remove any underline */
-}
- .nav-list-mobile a:hover {
-  /* No visual change on hover */
-  color: #ffffff;
-  text-decoration: none;
-  transform: none;
-}
-
-  /* Quick Order button styling - same as desktop */
-  .nav-list-mobile a[href="/quick-purchase"] {
-    padding: 0.7rem 1.3rem;
-    background: background: linear-gradient(135deg, #ffd54f, #ffb74d); /* Light orange */
-    color: #fff;
-    border-radius: 20px;
+  .nav-list-mobile a {
+    color: #ffffff;
+    text-decoration: none;
     font-weight: 600;
-    border: 2px solid #ff9800;
-    box-shadow: 0 4px 10px rgba(255, 152, 0, 0.4);
-    margin: 0;
-    animation: quickOrderBlink 2s infinite ease-in-out;
-    animation-fill-mode: forwards;
-  }
-
-  .nav-list-mobile a[href="/quick-purchase"]:hover {
-    animation-play-state: paused; /* Pause animation on hover */
-    background: #ff6e1b;
-    box-shadow: 0 6px 16px rgba(255, 152, 0, 0.6);
-    transform: scale(1.1);
-    color: #fff; /* Override the yellow hover */
-    text-decoration: none; /* Remove underline for button */
-  }
-
-  /* Login button styling - same as desktop */
-  .nav-list-mobile a[href="/AdminLogin"] {
+    font-size: 1.2rem;
     padding: 0.5rem 1rem;
-    background: linear-gradient(135deg, #ff512f, #dd2476);
-    color: #fff;
-    border-radius: 10px;
-    font-weight: bold;
-    box-shadow: 0 0 10px #ff512f88;
-    animation: pulseGlow 2s infinite;
-    margin: 10px 0;
+    border-radius: 8px;
+    transition: color 0.3s ease;
+    display: block;
+    text-align: center;
+    outline: none;
   }
 
-  .nav-list-mobile a[href="/AdminLogin"]:hover {
-    color: #fff; /* Keep white text on login button */
-    text-decoration: none; /* Remove underline for button */
+  /* Quick Order - Mobile: Slide Animation */
+  .nav-list-mobile a[href="/quick-purchase"] {
+    background: linear-gradient(90deg, #FFD700, #FF4500, #FFD700);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: slideBackAndForth 3s ease-in-out infinite alternate;
   }
 
-  /* Logo sizing for mobile */
+  /* Login Button - Mobile: Compact Size */
+.nav-list-mobile a[href="/AdminLogin"] {
+  padding: 0.4rem 0.8rem !important;
+  font-size: 0.95rem !important;
+  border: 1px solid #FFD700 !important;
+  background: transparent !important;
+  color: #FFD700 !important;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.3) !important;
+  animation: pulseGold 2.5s infinite alternate !important;
+  margin: 8px 0 !important;
+  border-radius: 18px !important;
+}
+  /* Logo */
   .header-mobile img {
-    height: 60px; /* Slightly smaller than desktop */
+    height: 60px;
     width: 60px;
     border-radius: 50%;
     object-fit: cover;
@@ -438,25 +358,14 @@ const mobileCSS = `
   }
 }
 
+/* Extra Small Devices */
 @media (max-width: 480px) {
   .nav-list-mobile a {
-    font-size: 1.1rem; /* Slightly smaller on very small devices */
-  }
-}
-  
-  .nav-list-mobile {
-    padding: 1.5rem 0.5rem;
-    gap: 0.8rem;
+    font-size: 1.1rem;
   }
 
-  .nav-list-mobile a {
-    font-size: 0.95rem;
-    padding: 0.5rem 1rem;
-  }
-
-  .header-mobile img {
-    height: 50px;
-    width: 50px;
+  .nav-list-mobile a[href="/quick-purchase"] {
+    font-size: 1.1rem;
   }
 }
 `;
