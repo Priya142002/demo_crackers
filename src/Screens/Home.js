@@ -1,57 +1,47 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import logo from "../assets/logo.jpg";
 import hero_bg from "../assets/imgbg.jpg";
-import pro_img from "../assets/firecracker_img.webp";
-import new_img from  "../assets/fountain.jpeg";
-import new_img2 from  "../assets/skypalce.jpeg";
+import about_img from "../assets/aboutusimg.jpg";
+import new_img from "../assets/fountain.jpeg";
+import new_img2 from "../assets/skypalce.jpeg";
 import new_img3 from "../assets/wheel.jpg";
 import new_img4 from "../assets/fire cracker img 5.jpg";
-import about_img from "../assets/aboutusimg.jpg";
 import Header from './HeaderLayouts';
 import Footer from './FooterLayouts';
-import pro_img2 from"../assets/fire gif.webp";
-import { FiCalendar, FiDollarSign, FiAward,FiCheck,FiX } from 'react-icons/fi';
-import { 
-    FiFacebook, 
-    FiInstagram, 
-    FiTwitter, 
-    FiLinkedin,
-    FiChevronRight,
-    FiMapPin,
-    FiPhone,
-    FiMail,
-    FiClock,
-    FiSend,
-    FiAlertTriangle,
-    FiUser,
-    FiWind,
-    FiDroplet,
-    FiShield,
-    FiAlertCircle,
-    FiBookOpen,
+import { FiX, FiCheck, FiMapPin, FiPhone, FiMail, FiClock, FiSend, FiAlertTriangle } from 'react-icons/fi';
 
-   
-
- 
- 
-  } from 'react-icons/fi';
- 
 function Home() {
- // State for controlling the popup
- const [showPopup, setShowPopup] = useState(true); 
+  const [showPopup, setShowPopup] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
   const [isRenderPopup, setIsRenderPopup] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [hoverState, setHoverState] = useState({});
 
-  // Check on component mount if popup has been shown before
+  // Contact form state
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmittingContact, setIsSubmittingContact] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // null, 'success', 'error'
+
   useEffect(() => {
     const hasSeenPopup = localStorage.getItem('hasSeenPopup');
     if (!hasSeenPopup) {
-      setShowPopup(true); // Show only if not seen before
+      setShowPopup(true);
     }
   }, []);
 
-  // Handle animation states
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     if (showPopup) {
       setIsRenderPopup(true);
@@ -63,1723 +53,725 @@ function Home() {
     }
   }, [showPopup]);
 
-  // Close handler - also mark as seen
   const handleClose = () => {
     setIsVisible(false);
     setTimeout(() => {
       setShowPopup(false);
-      localStorage.setItem('hasSeenPopup', 'true'); // Remember user saw it
+      localStorage.setItem('hasSeenPopup', 'true');
     }, 300);
   };
 
+  const setHover = (id, value) => {
+    setHoverState(prev => ({ ...prev, [id]: value }));
+  };
+
+  // Contact form handlers
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmittingContact(true);
+    setSubmitStatus(null);
+    
+    // Simulate form submission (replace with actual API call)
+    try {
+      // This would be your actual API call in a real application
+      // await submitContactForm(formData);
+      
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    } catch (error) {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmittingContact(false);
+      
+      // Clear status message after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus(null);
+      }, 5000);
+    }
+  };
+
+  // Dynamic styles based on mobile
+  const getStyles = () => {
+    const gap = isMobile ? '1rem' : '2rem';
+    const padding = isMobile ? '1rem' : '2rem';
+    const fontSize = isMobile ? '1rem' : '1.1rem';
+
+    return {
+      // Popup
+      popupOverlay: {
+        position: 'fixed',
+        top: 0, left: 0, right: 0, bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.85)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        padding: '20px',
+      },
+      popupContainer: {
+        backgroundColor: '#fff',
+        borderRadius: '16px',
+        maxWidth: '500px',
+        width: '100%',
+        overflow: 'hidden',
+        boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+      },
+      popupHeader: {
+        background: 'linear-gradient(135deg, #541354, #8E24AA)',
+        color: 'white',
+        padding: '20px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      },
+      popupTitle: {
+        margin: 0,
+        fontSize: '1.4rem',
+        fontWeight: '600',
+      },
+      closeButton: {
+        background: 'none',
+        border: 'none',
+        color: 'white',
+        fontSize: '1.6rem',
+        cursor: 'pointer',
+      },
+      popupContent: {
+        padding: '30px 20px',
+        lineHeight: 1.7,
+        color: '#333',
+        textAlign: 'center',
+      },
+      acceptButton: {
+        display: 'block',
+        width: '100%',
+        padding: '16px',
+        background: 'linear-gradient(90deg, #FF6B35, #F8B500)',
+        color: 'white',
+        border: 'none',
+        fontSize: '1.1rem',
+        fontWeight: '600',
+        cursor: 'pointer',
+        textAlign: 'center',
+        borderRadius: '0 0 16px 16px',
+      },
+
+      // Hero
+      heroSection: {
+        height: '90vh',
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url(${hero_bg})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        color: 'white',
+        textAlign: 'center',
+      },
+      heroContent: {
+        zIndex: 2,
+        maxWidth: '800px',
+        padding: '20px',
+      },
+      heroTitle: {
+        fontSize: 'clamp(2.5rem, 8vw, 5rem)',
+        background: 'linear-gradient(90deg, #FFD700, #FF9800)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        margin: '0 0 1rem 0',
+        fontWeight: 'bold',
+      },
+      heroSubtitle: {
+        fontSize: '1.3rem',
+        opacity: 0.9,
+        marginBottom: '2rem',
+      },
+      heroButton: {
+        display: 'inline-block',
+        padding: '14px 40px',
+        background: 'linear-gradient(90deg, #FF6B35, #F8B500)',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '30px',
+        fontWeight: '600',
+        fontSize: '1.2rem',
+        boxShadow: '0 6px 20px rgba(255, 107, 53, 0.5)',
+        transition: 'all 0.3s',
+      },
+      heroButtonHover: {
+        transform: 'translateY(-3px)',
+        boxShadow: '0 8px 30px rgba(255, 107, 53, 0.7)',
+      },
+
+      // Feature Strip
+      featureStrip: {
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '30px',
+        padding: '15px 20px',
+        backgroundColor: '#FFF3E0',
+        color: '#541354',
+        fontSize: '1rem',
+        flexWrap: 'wrap',
+      },
+      featureItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        fontWeight: '500',
+      },
+
+      // About Section
+      aboutSection: {
+        padding: '80px 20px',
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        gap: '50px',
+        alignItems: 'center',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        backgroundColor: '#FDF9F5',
+        borderRadius: '20px',
+        overflow: 'hidden',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+      },
+      aboutImageWrapper: {
+        flex: '1 1 400px',
+        height: '400px',
+        overflow: 'hidden',
+        borderRadius: '16px',
+        boxShadow: '0 15px 35px rgba(0,0,0,0.15)',
+      },
+      aboutImage: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+      },
+      aboutText: {
+        flex: '1 1 500px',
+        padding: '20px',
+      },
+      aboutTitle: {
+        fontSize: '2.4rem',
+        color: '#541354',
+        marginBottom: '1.2rem',
+      },
+      aboutDesc: {
+        fontSize: fontSize,
+        lineHeight: 1.7,
+        color: '#444',
+        marginBottom: '1rem',
+      },
+      ctaLink: {
+        display: 'inline-block',
+        padding: '12px 28px',
+        background: 'linear-gradient(90deg, #541354, #8E24AA)',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '30px',
+        fontWeight: '600',
+        fontSize: '1rem',
+        transition: 'all 0.3s',
+      },
+      ctaLinkHover: {
+        background: '#541354',
+        transform: 'translateY(-2px)',
+      },
+
+      // Products
+      productsSection: {
+        padding: '80px 20px 0',
+        textAlign: 'center',
+      },
+      sectionTitle: {
+        fontSize: '2.5rem',
+        color: '#541354',
+        marginBottom: '40px',
+      },
+      productGrid: {
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+        gap: '30px',
+        maxWidth: '1000px',
+        margin: '0 auto',
+      },
+      productCard: {
+        borderRadius: '12px',
+        overflow: 'hidden',
+        boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+        transition: 'all 0.3s',
+      },
+      productCardHover: {
+        transform: 'translateY(-8px)',
+        boxShadow: '0 15px 40px rgba(0,0,0,0.2)',
+      },
+      productImg: {
+        width: '100%',
+        height: '200px',
+        objectFit: 'cover',
+      },
+      productInfo: {
+        padding: '16px',
+        backgroundColor: '#fff',
+      },
+      productName: {
+        margin: '0 0 6px 0',
+        fontSize: '1.1rem',
+        color: '#541354',
+        fontWeight: '600',
+      },
+      productDesc: {
+        margin: '0',
+        fontSize: '0.9rem',
+        color: '#666',
+      },
+      viewAll: {
+        display: 'inline-block',
+        marginTop: '30px',
+        padding: '12px 30px',
+        background: 'transparent',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '30px',
+        fontWeight: '600',
+        fontSize: '1rem',
+        transition: 'all 0.3s',
+        background: "linear-gradient(135deg, #FF6B6B, #FF8E53)",
+      },
+
+      // Safety Banner
+      safetyBanner: {
+        margin: '0 20px',
+        padding: '10px 20px',
+        background: "linear-gradient(135deg, #FF6B6B, #FF8E53)",
+        color: '#541354',
+        borderRadius: '10px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '0px',
+        flexWrap: 'wrap',
+        fontSize: '1rem',
+        fontWeight: '500',
+      },
+      safetyLink: {
+        color: 'white',
+        textDecoration: 'none',
+        fontWeight: '600',
+      },
+
+      // Contact Section
+      contactSection: {
+        padding: '50px 20px',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        position: 'relative',
+        overflow: 'hidden',
+      },
+      contactContainer: {
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+        gap: isMobile ? '30px' : '60px',
+        alignItems: 'center',
+        position: 'relative',
+        zIndex: 2,
+      },
+      contactTextWrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.5rem',
+      },
+      contactTitle: {
+        fontSize: '2.6rem',
+        color: '#541354',
+        fontWeight: '700',
+        lineHeight: '1.2',
+        margin: 0,
+      },
+      contactSubtitle: {
+        fontSize: '1.1rem',
+        color: '#555',
+        lineHeight: 1.6,
+        margin: 0,
+      },
+      contactInfo: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        marginTop: '1rem',
+      },
+      contactItem: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        fontSize: '1.1rem',
+        color: '#333',
+      },
+      contactForm: {
+        background: 'rgba(255, 255, 255, 0.9)',
+        backdropFilter: 'blur(10px)',
+        borderRadius: '16px',
+        padding: '40px',
+        boxShadow: '0 15px 40px rgba(0,0,0,0.15)',
+        transform: isMobile ? 'none' : 'translateY(20px)',
+      },
+      
+      // Form styles
+      modernFormStyle: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px',
+      },
+     formRowStyle: {
+  display: 'grid',
+  gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+  gap: '12px',
+  marginBottom: '1rem',
+},
+    modernInputStyle: {
+  padding: '14px',
+  borderRadius: '8px',
+  border: '1px solid #ddd',
+  fontSize: '1rem',
+  width: '100%',
+  backgroundColor: '#fff',
+  transition: 'all 0.3s',
+  boxSizing: 'border-box',
+},
+      modernSelectStyle: {
+        padding: '14px',
+        borderRadius: '8px',
+        border: '1px solid #ddd',
+        fontSize: '1rem',
+        width: '100%',
+        backgroundColor: '#fff',
+        transition: 'all 0.3s',
+      },
+      modernTextareaStyle: {
+  padding: '14px',
+  borderRadius: '8px',
+  border: '1px solid #ddd',
+  fontSize: '1rem',
+  width: '100%',
+  minHeight: '120px',
+  resize: 'vertical',
+  backgroundColor: '#fff',
+  transition: 'all 0.3s',
+  boxSizing: 'border-box',
+},
+      modernSubmitButton: {
+        padding: '14px',
+        background: '#541354',
+        color: 'white',
+        border: 'none',
+        borderRadius: '8px',
+        fontSize: '1.1rem',
+        fontWeight: '600',
+        cursor: 'pointer',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px',
+        transition: 'all 0.3s',
+      },
+      submitButtonHover: {
+        background: '#4A104A',
+        transform: 'translateY(-2px)',
+      },
+      modernSuccessStyle: {
+        padding: '12px',
+        borderRadius: '8px',
+        backgroundColor: '#d4edda',
+        color: '#155724',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        fontSize: '0.9rem',
+      },
+      modernErrorStyle: {
+        padding: '12px',
+        borderRadius: '8px',
+        backgroundColor: '#f8d7da',
+        color: '#721c24',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        fontSize: '0.9rem',
+      },
+
+      // Background Decoration
+      contactBg: {
+        position: 'absolute',
+        top: '20%',
+        right: '10%',
+        width: '300px',
+        height: '300px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(255,152,0,0.1) 0%, rgba(255,152,0,0) 70%)',
+        zIndex: 1,
+        pointerEvents: 'none',
+        opacity: 0.6,
+      },
+    };
+  };
+
+  const styles = getStyles();
+
   return (
     <>
-    <Header />
- {/*
-   {isRenderPopup && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.7)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          opacity: isVisible ? 1 : 0,
-          transition: 'opacity 0.3s ease',
-          pointerEvents: isVisible ? 'auto' : 'none',
-        }}>
-          <div style={{
-  backgroundColor: '#fff',
-  borderRadius: '12px',
-  width: '90%',
-  maxWidth: '600px',
-  overflow: 'hidden',
-  boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
-  transform: isVisible ? 'scale(1)' : 'scale(0.95)',
-  transition: 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-  '@media (max-width: 480px)': {
-    width: '95%',
-    maxHeight: '90vh'
-  }
-}}>
-            
-            <div style={{
-              background: 'linear-gradient(to right, #ff5e62, #ff9966)',
-              color: 'white',
-              padding: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center',
-                gap: '15px'
-              }}>
-                <div style={{
-                  background: 'rgba(255,255,255,0.3)',
-                  borderRadius: '50%',
-                  width: '40px',
-                  height: '40px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                }}>
-                  <FiAlertTriangle size={20} />
-                </div>
-                <h2 style={{ 
-                  margin: 0, 
-                  fontSize: '1.25rem', 
-                  fontWeight: '600',
-                  lineHeight: '1.4'
-                }}>
-                  Important  
-                </h2>
-              </div>
-              <button 
-                onClick={handleClose}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'white',
-                  fontSize: '1.5rem',
-                  cursor: 'pointer',
-                  padding: '5px',
-                  transition: 'transform 0.2s ease',
-                  ':hover': {
-                    transform: 'rotate(90deg)'
-                  }
-                }}
-              >
+      <Header />
+
+      {/* === Popup === */}
+      {isRenderPopup && (
+        <div style={styles.popupOverlay}>
+          <div style={styles.popupContainer}>
+            <div style={styles.popupHeader}>
+              <h3 style={styles.popupTitle}>Legal Notice</h3>
+              <button onClick={handleClose} style={styles.closeButton}>
                 <FiX />
               </button>
             </div>
+            <div style={styles.popupContent}>
 
-           
-            <div style={{ 
-              padding: '25px',
-              maxHeight: '60vh', 
-              overflowY: 'auto',
-              opacity: isVisible ? 1 : 0.7,
-              transform: isVisible ? 'scale(1)' : 'scale(0.95)',
-              transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-            }}>
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
-              }}>
-                <p style={{
-                  margin: 0,
-                  color: '#333',
-                  lineHeight: '1.6',
-                  fontSize: '1rem',
-                }}>
-                  As per 2018 Supreme Court Order, online sale of firecrackers is NOT permitted. 
-                  We value our customers and at the same time, we respect the jurisdiction.
-                </p>
-                
-                <p style={{
-                  margin: 0,
-                  color: '#333',
-                  lineHeight: '1.6',
-                  fontSize: '1rem',
-                }}>
-                  We request our customers to:
-                </p>
-                
-                <ul style={{
-                  margin: 0,
-                  paddingLeft: '20px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '10px',
-                }}>
-                  <li>Select your products in the Estimate Page to see your estimation</li>
-                  <li>Submit the required crackers through the Get Estimate Button</li>
-                </ul>
-                
-                <p style={{
-                  margin: 0,
-                  color: '#333',
-                  lineHeight: '1.6',
-                  fontSize: '1rem',
-                }}>
-                  We will contact you within 2 hours and confirm the order through phone call. 
-                  Please add and submit your enquiries and enjoy your Diwali with SRI GOKILAA CRACKERS.
-                </p>
-                
-                <p style={{
-                  margin: 0,
-                  color: '#333',
-                  lineHeight: '1.6',
-                  fontSize: '1rem',
-                }}>
-                  SRI GOKILAA CRACKERS is a shop following 100% legal & statutory compliances and 
-                  all our shops, go-downs are maintained as per the explosive acts. We send 
-                  the parcels through registered and legal transport service providers as like 
-                  every other major companies in Sivakasi is doing so.
-                </p>
-              </div>
-            </div>
+  <p><strong>Note:     </strong> As per Supreme Court guidelines (2018), crackers cannot be sold directly online.</p>
+  <p>Submit your list through the <strong>Estimate Page</strong> — we’ll confirm your order by call.</p>
+  <p>We follow all <strong>safety norms & eco-friendly practices</strong> for your celebrations.</p>
+</div>
 
-          
-            <div style={{
-              padding: '20px',
-              textAlign: 'center',
-              borderTop: '1px solid #f0f0f0',
-              background: '#f9f9f9',
-            }}>
-              <button
-                onClick={handleClose}
-                style={{
-                  background: 'linear-gradient(to right, #ff5e62, #ff9966)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '30px',
-                  padding: '12px 30px',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  boxShadow: '0 4px 15px rgba(255, 94, 98, 0.3)',
-                  transition: 'all 0.3s ease',
-                  ':hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 6px 20px rgba(255, 94, 98, 0.4)'
-                  }
-                }}
-              >
-                <FiCheck />
-                I Understand
-              </button>
-            </div>
+            <button onClick={handleClose} style={styles.acceptButton}>
+              <FiCheck /> I Accept
+            </button>
           </div>
         </div>
       )}
-*/}
-   {/* Hero Section */}
-<section style={{...heroSectionStyle, backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${hero_bg})`}}>
 
-   
-  <div style={heroContentStyle}>
-    <h1 style={heroTitleStyle}>DEMO CRACKERS</h1>
-    <p style={heroSubtitleStyle}>
-       Big sparks. Bright moments. Trusted quality.
-    </p>
-   
-    <div style={heroButtonContainer}>
-      <Link to="/product" style={heroButtonStyle}>
-        Shop Trusted Crackers
-      </Link>
-     
-    </div>
-  </div>
-</section>
+      {/* === Hero === */}
+      <section style={styles.heroSection}>
+        <div style={styles.heroContent}>
+          <h1 style={styles.heroTitle}>Where Fire Meets Festival</h1>
+          <p style={styles.heroSubtitle}>Spreading Smiles with Every Spark!</p>
+          <Link
+            to="/product"
+            style={{
+              ...styles.heroButton,
+              ...(hoverState.hero ? styles.heroButtonHover : {}),
+            }}
+            onMouseEnter={() => setHover('hero', true)}
+            onMouseLeave={() => setHover('hero', false)}
+          >
+            Explore Collection
+          </Link>
+        </div>
+      </section>
 
+      {/* === About === */}
+      <section style={styles.aboutSection}>
+        <div style={styles.aboutImageWrapper}>
+          <img src={about_img} alt="About" style={styles.aboutImage} />
+        </div>
+        <div style={styles.aboutText}>
+          <h2 style={styles.aboutTitle}>Born from Fire, Built on Trust</h2>
+          <p style={styles.aboutDesc}>
+            we believe every celebration deserves to sparkle with joy, color, and unforgettable memories. With years of expertise in crafting premium-quality firecrackers, we are dedicated to bringing safe, vibrant, and eco-friendly fireworks to your festive moments.
+          </p>
+          <p style={styles.aboutDesc}>
+            Our collection ranges from traditional favorites to innovative fireworks that combine dazzling effects with safety and sustainability. Each product is carefully tested to ensure the highest standards of quality, performance, and customer satisfaction.
+          </p>
+          <p style={styles.aboutDesc}>
+            We don't just sell crackers. We deliver memories that echo through generations.
+          </p>
+          <Link
+            to="/about"
+            style={{
+              ...styles.ctaLink,
+              ...(hoverState.about ? styles.ctaLinkHover : {}),
+            }}
+            onMouseEnter={() => setHover('about', true)}
+            onMouseLeave={() => setHover('about', false)}
+          >
+            Our Legacy
+          </Link>
+        </div>
+      </section>
 
-{/* About Us Section */}
-<section style={aboutSectionStyle}>
-  <div style={aboutContainerStyle}>
-    <div style={aboutContentStyle}>
-      <h2 style={aboutTitleStyle}>About Demo Crackers</h2>
-      <div style={aboutTextContainer}>
-        <p style={aboutTextStyle}>
-          We,Demo Crackers, based in Virudhunagar, the Cracker City of Tamilnadu. We are the agency to sell all fireworks crackers based upon the customer orders.
-        </p>
-        <p style={aboutTextStyle}>
-          We are in the field of crackers for more than a decade. We are one of the Largest Manufacturer, Retailer & Wholesalers of crackers in Virudhunagar. We procure the crackers well in advance during the best sun drying months of March, April and May to serve the customers with high quality products at the most competitive price.
-        </p>
-        <p style={aboutTextStyle}>
-          At Demo Crackers, we're committed to offering quality products, unparalleled service and the most competitive prices in town. Great service begins with great people and industry experience, which is why our staff is made up of the best and most qualified in the business.
-        </p>
-        <div style={{ textAlign: 'center' }}>
-        <Link to="/about" style={learnMoreButtonStyle}>
-          Learn More
+      {/* === Products === */}
+      <section style={styles.productsSection}>
+        <h2 style={styles.sectionTitle}>This Season's Stars</h2>
+        <div style={styles.productGrid}>
+          {[
+            { img: new_img2, name: "Sky Palace", desc: "100-shot aerial burst" },
+            { img: new_img, name: "Fountain Gold", desc: "Colorful ground bloom" },
+            { img: new_img3, name: "Rainbow Wheel", desc: "Spinning joy" },
+            { img: new_img4, name: "Silver Cascade", desc: "Elegant silver flow" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              style={{
+                ...styles.productCard,
+                ...(hoverState[`card${i}`] ? styles.productCardHover : {}),
+              }}
+              onMouseEnter={() => setHover(`card${i}`, true)}
+              onMouseLeave={() => setHover(`card${i}`, false)}
+            >
+              <img src={item.img} alt={item.name} style={styles.productImg} />
+              <div style={styles.productInfo}>
+                <h3 style={styles.productName}>{item.name}</h3>
+                <p style={styles.productDesc}>{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <Link
+          to="/product"
+          style={{
+            ...styles.viewAll,
+            ...(hoverState.viewAll ? styles.viewAllHover : {}),
+          }}
+        >
+          View All Crackers →
         </Link>
-        </div>
-      </div>
-    </div>
-    <div style={aboutImageContainer}>
-      <img 
-        src={about_img} 
-        alt="Vivify Traders  " 
-        style={aboutImageStyle}
-      />
-      <div style={aboutStatsContainer}>
-        <div style={aboutStatItem}>
-          <FiCalendar style={aboutStatIcon} />
-          <div>
-            <h3 style={aboutStatNumber}>10+</h3>
-            <p style={aboutStatText}>Years Experience</p>
+      </section>
+
+      {/* === Contact Section === */}
+      <section style={styles.contactSection}>
+        <div style={styles.contactBg}></div>
+        <div style={styles.contactContainer}>
+          <div style={styles.contactTextWrapper}>
+            <h2 style={styles.contactTitle}>Let's Light Up the Conversation</h2>
+            <p style={styles.contactSubtitle}>
+              Have questions? Need help with your Diwali order? We're here for you — before, during, and after the spark.
+            </p>
+            <div style={styles.contactInfo}>
+              <div style={styles.contactItem}><FiMapPin /> Virudhunagar, TN 626189</div>
+              <div style={styles.contactItem}><FiPhone /> +91 9787009888</div>
+              <div style={styles.contactItem}><FiMail /> srigokilaacrackers0@gmail.com</div>
+              <div style={styles.contactItem}><FiClock /> Mon–Sat: 9AM–8PM</div>
+            </div>
           </div>
-        </div>
-        <div style={aboutStatItem}>
-          <FiAward style={aboutStatIcon} />
-          <div>
-            <h3 style={aboutStatNumber}>1000+</h3>
-            <p style={aboutStatText}>Happy Customers</p>
-          </div>
-        </div>
-        <div style={aboutStatItem}>
-          <FiDollarSign style={aboutStatIcon} />
-          <div>
-            <h3 style={aboutStatNumber}>Best</h3>
-            <p style={aboutStatText}>Prices in Town</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
- 
-
-{/* Products Section */}
-<section style={productsSectionStyle}>
-  <div style={productsContainerStyle}>
-    <h2 style={productsTitleStyle}>FireWorks Crackers</h2>
-    <p style={productsSubtitleStyle}>Premium quality crackers loved by customers</p>
-    
-    <div style={productsGridStyle}>
-      {/* Product Card 1 */}
-      <div style={productCardStyle}>
-       <div style={{...productImageStyle}}><img src={new_img} alt="Test" style={{
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover'
-      }}  /></div>
-        <h3 style={productNameStyle}>Sparkling Fountain</h3>
-        <p style={productDescStyle}>Beautiful ground spinner with colorful sparks</p>
-      </div>
-
-      {/* Product Card 2 */}
-      <div style={productCardStyle}>
-          <div style={{...productImageStyle}}><img src={new_img2} alt="Test" style={{
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover'
-      }}  /></div>
-        <h3 style={productNameStyle}>Sky Palace</h3>
-        <p style={productDescStyle}>100-shot aerial repeater with stunning effects</p>
-      </div>
-
-      {/* Product Card 3 */}
-      <div style={productCardStyle}>
-        <div style={{...productImageStyle}}><img src={new_img3} alt="Test" style={{
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover'
-      }}  /></div>
-        <h3 style={productNameStyle}>Rainbow Wheels</h3>
-        <p style={productDescStyle}>Colorful spinning wheels with whistling sound</p>
-      </div>
-    
-     {/* Product Card*/}
-      <div style={productCardStyle}>
-       <div style={{...productImageStyle}}><img src={new_img4} alt="Test" style={{
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover'
-      }}  /></div>
-        <h3 style={productNameStyle}>Silver Fountain</h3>
-        <p style={productDescStyle}>Colorful fountain with silver sparks</p>
-      </div>
-    </div>
-
-
-    <div style={viewMoreContainerStyle}>
-      <Link to="/product" style={viewMoreButtonStyle}>
-        View All Products
-      </Link>
-    </div>
-  </div>
-</section>
-
-
-{/* Safety Tips Section */}
-<section style={safetySectionStyle}>
-  <div style={safetyContainerStyle}>
-    <h2 style={safetyTitleStyle}>Your Safety, Our Priority</h2>
-    <p style={safetySubtitleStyle}>Enjoy festivals safely with these important precautions</p>
-    
-    <div style={safetyGridStyle}>
-      {/* Safety Tip 1 */}
-      <div style={safetyCardStyle}>
-        <div style={safetyIconContainer}>
-          <FiAlertTriangle style={safetyIconStyle} />
-        </div>
-        <h3 style={safetyTipTitle}>Purchase Quality Products</h3>
-        <p style={safetyTipText}>
-          Always buy fireworks from licensed manufacturers like Vivify Traders. 
-          Check for ISI mark and manufacturer details.
-        </p>
-      </div>
-
-      {/* Safety Tip 2 */}
-      <div style={safetyCardStyle}>
-        <div style={safetyIconContainer}>
-          <FiUser style={safetyIconStyle} />
-        </div>
-        <h3 style={safetyTipTitle}>Adult Supervision</h3>
-        <p style={safetyTipText}>
-          Never allow children to handle fireworks unsupervised. 
-          Adults should light all fireworks.
-        </p>
-      </div>
-
-      {/* Safety Tip 3 */}
-      <div style={safetyCardStyle}>
-        <div style={safetyIconContainer}>
-          <FiWind style={safetyIconStyle} />
-        </div>
-        <h3 style={safetyTipTitle}>Open Space</h3>
-        <p style={safetyTipText}>
-          Use fireworks only in open areas away from buildings, 
-          dry leaves or flammable materials.
-        </p>
-      </div>
-</div>
- <div style={safetyGridStyle}>
-      {/* Safety Tip 4 */}
-      <div style={safetyCardStyle}>
-        <div style={safetyIconContainer}>
-        <FiDroplet style={safetyIconStyle} />
-        </div>
-        <h3 style={safetyTipTitle}>Water Source</h3>
-        <p style={safetyTipText}>
-          Keep buckets of water and sand ready for emergencies. 
-          Soak used fireworks before disposal.
-        </p>
-      </div>
-
-      {/* Safety Tip 5 */}
-      <div style={safetyCardStyle}>
-        <div style={safetyIconContainer}>
-          <FiShield style={safetyIconStyle} />
-        </div>
-        <h3 style={safetyTipTitle}>Protective Gear</h3>
-        <p style={safetyTipText}>
-          Wear cotton clothes, eye protection, and keep hair tied back. 
-          Avoid loose synthetic fabrics.
-        </p>
-      </div>
-
-      {/* Safety Tip 6 */}
-      <div style={safetyCardStyle}>
-        <div style={safetyIconContainer}>
-          <FiAlertCircle style={safetyIconStyle} />
-        </div>
-        <h3 style={safetyTipTitle}>Emergency Preparedness</h3>
-        <p style={safetyTipText}>
-          Keep first aid kit and fire extinguisher nearby. 
-          Know emergency contact numbers.
-        </p>
-      </div>
-    </div>
-
-    <div style={safetyButtonContainer}>
-      <Link to="/safety" style={safetyButtonStyle}>
-        <FiBookOpen style={buttonIconStyle} />
-        View Complete Safety Guide
-      </Link>
-    </div>
-  </div>
-</section>
-
-{/* Contact Us Section */}
-<section style={contactSectionStyle}>
-  <div style={contactContainerStyle}>
-    <div style={contactHeaderStyle}>
-      <h2 style={contactTitleStyle}>Let’s Connect</h2>
-      <p style={contactSubtitleStyle}>We'd love to hear from you! Reach out for inquiries, orders, or partnerships.</p>
-    </div>
-
-    <div style={contactContentStyle}>
-      {/* Contact Info Cards */}
-      <div style={contactInfoStyle}>
-        {/* Contact Card 1 */}
-        <div style={contactCardStyle}>
-          <div style={contactIconWrapper}>
-            <FiMapPin style={contactIconStyle} />
-          </div>
-          <h3 style={contactCardTitle}>  Location</h3>
-          <p style={contactCardText}>
-            4/1C Rajamuthu Nagar, Naranapuram Puthur, Naranapuram,Virudhunagar, Tamil Nadu 626189 <br />
-           
-          </p>
-        </div>
-
-        {/* Contact Card 2 */}
-        <div style={contactCardStyle}>
-          <div style={contactIconWrapper}>
-            <FiMail style={contactIconStyle} />
-          </div>
-          <h3 style={contactCardTitle}>Email Us</h3>
-          <p style={contactCardText}>
-          srigokilaacrackers0@gmail.com
-          </p>
-        </div>
-
-        {/* Contact Card 3 */}
-        <div style={contactCardStyle}>
-          <div style={contactIconWrapper}>
-            <FiPhone style={contactIconStyle} />
-          </div>
-          <h3 style={contactCardTitle}>Call Us</h3>
-          <p style={contactCardText}>
-            +91 9787009888
-          </p>
-        </div>
-
-        {/* Contact Card 4 */}
-        <div style={contactCardStyle}>
-          <div style={contactIconWrapper}>
-            <FiClock style={contactIconStyle} />
-          </div>
-          <h3 style={contactCardTitle}>Working Hours</h3>
-          <p style={contactCardText}>
-            Monday - Saturday: 9AM - 8PM<br />
-            Sunday: Closed
-          </p>
-        </div>
-      </div>
-
-      {/* Contact Form */}
-      <div style={contactFormStyle}>
-        <form style={formStyle}>
-          <div style={formGroupStyle}>
-            <input 
-              type="text" 
-              placeholder="Your Name" 
-              style={inputStyle} 
-              required 
-            />
-          </div>
-          <div style={formGroupStyle}>
-            <input 
-              type="email" 
-              placeholder="Your Email" 
-              style={inputStyle} 
-              required 
-            />
-          </div>
-          <div style={formGroupStyle}>
-  <input 
-    type="tel" 
-    placeholder="Phone Number" 
-    style={inputStyle} 
-  />
-</div>
-
-<div style={formGroupStyle}>
-  <select style={inputStyle}>  {/* Remove the width: '85%' override */}
-    <option value="">Select Subject</option>
-    <option value="sales">Sales Inquiry</option>
-    <option value="wholesale">Wholesale Orders</option>
-    <option value="support">Customer Support</option>
-    <option value="other">Other</option>
-  </select>
-</div>
-
-          <div style={formGroupStyle}>
-            <textarea 
-              placeholder="Your Message" 
-              rows="5" 
-              style={textareaStyle} 
-              required
-            ></textarea>
-          </div>
-          <button type="submit" style={submitButtonStyle}>
-            <FiSend style={submitIconStyle} />
-            Send Message
-          </button>
-        </form>
-      </div>
-    </div>
+          <div style={styles.contactForm}>
+           <form style={styles.modernFormStyle} onSubmit={handleContactSubmit}>
+  {/* Name & Email Row */}
+  <div style={styles.formRowStyle}>
+    <input 
+      type="text" name="name" placeholder="Full Name"
+      style={styles.modernInputStyle} value={formData.name}
+      onChange={handleInputChange} required
+    />
+    <input 
+      type="email" name="email" placeholder="Email Address"
+      style={styles.modernInputStyle} value={formData.email}
+      onChange={handleInputChange} required
+    />
   </div>
 
- 
-</section>
+  {/* Phone & Subject Row */}
+  <div style={styles.formRowStyle}>
+    <input 
+      type="tel" name="phone" placeholder="Phone Number"
+      style={styles.modernInputStyle} value={formData.phone}
+      onChange={handleInputChange}
+    />
+    <select 
+      name="subject" style={styles.modernSelectStyle}
+      value={formData.subject} onChange={handleInputChange}
+    >
+      <option value="">Select Topic</option>
+      <option value="sales">Product Inquiry</option>
+      <option value="wholesale">Bulk Orders</option>
+      <option value="support">Customer Support</option>
+      <option value="other">General Question</option>
+    </select>
+  </div>
 
+  {/* Message Area */}
+  <div style={{ marginBottom: '1rem' }}>
+    <textarea 
+      name="message" placeholder="Tell us about your celebration plans..."
+      rows="5"
+      style={{
+        ...styles.modernTextareaStyle,
+        padding: '14px',
+        borderRadius: '8px',
+        border: '1px solid #ddd',
+        fontSize: '1rem',
+        width: '100%',
+        minHeight: '120px',
+        resize: 'vertical',
+        backgroundColor: '#fff',
+        transition: 'all 0.3s',
+        boxSizing: 'border-box',
+      }}
+      value={formData.message}
+      onChange={handleInputChange}
+      required
+    ></textarea>
+  </div>
 
+  {/* Status Messages */}
+  {submitStatus === 'success' && (
+    <div style={styles.modernSuccessStyle}>
+      <FiCheck /> Message sent successfully! We'll contact you soon.
+    </div>
+  )}
+  {submitStatus === 'error' && (
+    <div style={styles.modernErrorStyle}>
+      <FiX /> Failed to send message. Please try again.
+    </div>
+  )}
 
-{/* Footer Section */}
- <Footer />
+  {/* Submit Button */}
+  <button 
+    type="submit" 
+    style={{
+      ...styles.modernSubmitButton,
+      ...(hoverState.submit ? styles.submitButtonHover : {}),
+      padding: '14px',
+      background: '#541354',
+      color: 'white',
+      border: 'none',
+      borderRadius: '8px',
+      fontSize: '1.1rem',
+      fontWeight: '600',
+      cursor: 'pointer',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '8px',
+      transition: 'all 0.3s',
+    }} 
+    onMouseEnter={() => setHover('submit', true)}
+    onMouseLeave={() => setHover('submit', false)}
+    disabled={isSubmittingContact}
+  >
+    {isSubmittingContact ? 'Sending...' : (
+      <>
+        <FiSend />
+        Send Message
+      </>
+    )}
+  </button>
+</form>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
     </>
   );
 }
 
-// NavLink component with enhanced hover effects
-function NavLink({ to, children }) {
-  const [isHovered, setIsHovered] = React.useState(false);
-  
-  return (
-    <Link 
-      to={to} 
-      style={isHovered ? {...navLinkStyle, ...navLinkHoverStyle} : navLinkStyle}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {children}
-    </Link>
-  );
-}
-
-// Existing styles (unchanged)
-const headerStyle = {
-  background: 'linear-gradient(135deg, #1a237e 0%, #3949AB 50%, #5c6bc0 100%)',
-  padding: '0.5rem 2rem',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  
-  position: 'sticky',
-  top: 0,
-  zIndex: 1000,
-};
-
-const logoContainerStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '1rem'
-};
-
-const logoStyle = {
-  height: '70px',
-  width: '70px',
-  borderRadius: '50%',
-  objectFit: 'cover',
-  border: '2px solid #FF9800',
-  boxShadow: '0 0 15px rgba(255, 152, 0, 0.7)'
-};
-
-const navListStyle = {
-  display: 'flex',
-  listStyle: 'none',
-  gap: '1.5rem',
-  margin: 0,
-  padding: 0
-};
-
-const navItemStyle = {
-  borderRadius: '30px',
-  transition: 'all 0.3s ease'
-};
-
-const navLinkStyle = {
-  display: 'inline-block',
-  padding: '0.5rem 1rem',
-  backgroundColor: 'white',
-  color: '#3949AB',
-  textDecoration: 'none',
-  borderRadius: '10px',
-  fontWeight: 'bold',
-  transition: 'all 0.3s ease',
-  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-};
-
-const loginnavLinkStyle={
-    display: 'inline-block',
-  padding: '0.5rem 1rem',
-  backgroundColor: '#FF9800',
-    color: 'white',
-  textDecoration: 'none',
-  borderRadius: '10px',
-  fontWeight: 'bold',
-  transition: 'all 0.3s ease',
-  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-  ':hover': {
-      backgroundColor: '#F57C00',
-      transform: 'translateY(-2px)',
-      boxShadow: '0 6px 20px rgba(255, 152, 0, 0.6)'
-    }
-}
-
-
-const navLinkHoverStyle = {
-  border: 'none'
-};
-
-const heroSectionStyle = {
-  position: 'relative',
-  height: '60vh',
-  backgroundSize: 'cover',           // Ensures the image covers the area
-  backgroundPosition: 'center',      // Centers the image
-  backgroundRepeat: 'no-repeat',     // Prevents tiling
-  backgroundAttachment: 'fixed',     // Optional: parallax effect
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: 'white',
-  textAlign: 'center',
-  padding: '1rem 2rem',
-};
-
-const heroContentStyle = {
-  zIndex: 2,
-  maxWidth: '800px'
-};
-
-const heroTitleStyle = {
-  fontSize: 'clamp(2.3rem, 6vw, 4rem)',
-  background: 'linear-gradient(90deg, #FFD700, #FFA500, #FF8C00)',
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  backgroundClip: 'text',
-  textFillColor: 'transparent',
-  textAlign: 'center',
-  marginBottom: '1rem',
-  fontWeight: 'bold',
-  textShadow: '0 0 10px rgba(255, 165, 0, 0.3)',
-  position: 'relative',
-  display: 'inline-block',
-};
-
-const heroSubtitleStyle = {
-  fontSize: 'clamp(1rem, 2vw, 1.5rem)',
-  color: '#fff',
-  marginBottom: '2rem',
-  '@media (max-width: 480px)': {
-    fontSize: 'clamp(0.9rem, 1.5vw, 1.2rem)'
-  }
-};
-
-// Update the heroButtonContainer style to remove the line
-const heroButtonContainer = {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginTop: '1rem', // Reduced from 2rem to bring button closer to text
-  padding: '0', // Ensure no padding is causing extra space
-  border: 'none', // Explicitly remove any borders
-  outline: 'none' // Remove any outlines
-};
-
-// Update the heroButtonStyle to ensure no borders
-const heroButtonStyle = {
-  padding: '12px 30px',
- background: "linear-gradient(90deg, #FF6B35, #F8B500)",
-  color: 'white',
-  textDecoration: 'none',
-  borderRadius: '30px',
-  fontWeight: 'bold',
-  fontSize: '1.1rem',
-  transition: 'all 0.3s ease',
-  border: 'none', // Explicitly remove any borders
-  outline: 'none', // Remove any outlines
-  boxShadow: 'none', // Remove any shadows that might look like lines
-  '@media (max-width: 768px)': {
-    fontSize: '1rem',
-    padding: '10px 25px'
-  }
-};
-
-const secondaryButtonStyle = {
-  padding: '12px 30px',
-  backgroundColor: 'transparent',
-  color: 'white',
-  textDecoration: 'none',
-  borderRadius: '30px',
-  fontWeight: 'bold',
-  fontSize: '1.1rem',
-  transition: 'all 0.3s ease',
- 
-  border: '2px solid white'
-};
-
-const heroOverlayStyle = {
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  background: 'rgba(0, 0, 0, 0.3)'
-};
-
-const heroInfoBox = {
-    display: 'flex',
-    justifyContent: 'space-around',
-    flexWrap: 'wrap',
-    gap: '20px',
-    margin: '2rem 0',
-    padding: '1rem',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: '10px',
- 
-  };
-  
-  const heroInfoItem = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    maxWidth: '250px'
-  };
-  
-  const heroInfoIcon = {
-    fontSize: '1.5rem',
-    color: '#FF9800',
-    flexShrink: 0
-  };
-  
-  const heroInfoText = {
-    margin: 0,
-    fontSize: '0.9rem',
-    textAlign: 'left',
-    textShadow: 'none'
-  };
-
-  // About Us Section Styles
-const aboutSectionStyle = {
-  padding: '1rem',
-  backgroundColor: '#f9f9f9',
-boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)',
-  '@media (max-width: 480px)': {
-    padding: '1rem 0.5rem',
-    boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)'
-  }
-};
-  
-const aboutContainerStyle = {
-  maxWidth: '1200px',
-  margin: '0 auto',
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '3rem',
-  alignItems: 'center',
-  background: 'rgba(255, 255, 255, 0.9)',
-  borderRadius: '20px',
-  padding: '3rem 2rem',
-  boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)',
-  border: '1px solid rgba(84, 19, 84, 0.1)',
-  '@media (max-width: 768px)': {
-    flexDirection: 'column',
-    gap: '2rem',
-    padding: '2rem 1rem',
-    boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)'
-  },
-  '@media (max-width: 480px)': {
-    gap: '1.5rem',
-    padding: '1.5rem 1rem',
-    borderRadius: '15px',
-    boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)'
-  }
-};
-
-  const aboutContentStyle = {
-  flex: '1 1 45%',
-  minWidth: '300px',
-  '@media (max-width: 480px)': {
-    minWidth: '100%',
-    padding: '0 1rem'
-  }
-};
-  const aboutTitleStyle = {
-  fontSize: '2.5rem',
-  color: '#541354',
-  marginBottom: '1.5rem',
-  position: 'relative',
-  textAlign: 'center', // Center the title on all screens
-  '@media (max-width: 480px)': {
-    fontSize: '2rem', // Reduce font size slightly for mobile
-  }
-};
-  
-  const aboutTextContainer = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1.5rem',
-  };
-  
-  const aboutTextStyle = {
-  fontSize: '1rem',
-  lineHeight: '1.5',
-  color: '#333',
-  marginBottom: '0px',
-  textAlign: 'justify', // Justify text for better readability
-  '@media (max-width: 480px)': {
-    fontSize: '0.9rem', // Slightly reduce font size for mobile
-    lineHeight: '1.6',  // Increase line height for better spacing
-  }
-};
-// Update the aboutImageContainer style
-const aboutImageContainer = {
-  flex: '1 1 45%',
-  minWidth: '300px',
-  position: 'relative',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%',
-  '@media (max-width: 480px)': {
-    minWidth: '100%',
-    padding: '0',
-    margin: '0 auto',
-    maxWidth: '100%',
-    display: 'flex',
-    justifyContent: 'center' // Center the image horizontally
-  }
-};
-
-// Update the aboutImageStyle
-const aboutImageStyle = {
-  height: '400px',
-  width: '100%',
-  maxWidth: '500px',
-  borderRadius: '10px',
-  marginTop: '40px',
-  objectFit: 'cover',
-  objectPosition: 'center',
-  '@media (max-width: 768px)': {
-    height: '350px',
-    marginTop: '20px'
-  },
-  '@media (max-width: 480px)': {
-    height: '250px',
-    width: '100%',
-    maxWidth: '100%',
-    margin: '10px 0 0', // Remove auto margin to fill container
-    borderRadius: '10px',
-    padding: '0',
-    display: 'block',
-    objectFit: 'cover' // Ensure image covers the container
-  }
-};
-const aboutStatsContainer = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  flexWrap: 'wrap',
-  gap: '1rem',
-  marginTop: '2rem',
-  width: '100%', // Ensure stats take full width
-  '@media (max-width: 480px)': {
-    gap: '0.8rem',
-    marginTop: '1.5rem',
-    padding: '0 1rem' // Match image padding
-  }
-};
-
-  
-  const aboutStatItem = {
-  flex: '1 1 150px',
-  display: 'flex',
-  alignItems: 'center',
-  gap: '1rem',
-  backgroundColor: 'white',
-  padding: '1.5rem',
-  borderRadius: '8px',
-  boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)',
-  '@media (max-width: 480px)': {
-    flex: '1 1 120px',
-    padding: '1rem',
-    gap: '0.8rem'
-  }
-};
-  
-  const aboutStatIcon = {
-    fontSize: '2rem',
-    color: '#FF9800',
-  };
-  
-  const aboutStatNumber = {
-    fontSize: '1.8rem',
-    margin: '0',
-    color: '#541354',
-  };
-  
-  const aboutStatText = {
-    fontSize: '1rem',
-    margin: '0',
-    color: '#666',
-  };
-
-  const learnMoreButtonStyle = {
-  display: 'block', // Change to block to enable margin auto
-  margin: '1rem auto 0', // Auto horizontally, 1rem top margin
-  padding: '12px 30px',
- background: "linear-gradient(90deg, #FF6B35, #F8B500)",
-  color: 'white',
-  width: "100px",
-  textDecoration: 'none',
-  borderRadius: '30px',
-  fontWeight: 'bold',
-  fontSize: '1rem',
-  transition: 'all 0.3s ease',
-  boxShadow: '0 4px 15px rgba(255, 152, 0, 0.4)',
-  border: '2px solid #FF9800',
-  cursor: 'pointer',
-  ':hover': {
-    backgroundColor: '#F57C00',
-    transform: 'translateY(-2px)',
-    boxShadow: '0 6px 20px rgba(255, 152, 0, 0.6)'
-  },
-};
-
-
-  // Products Section Styles
-const productsSectionStyle = {
-  padding: '2rem 1rem',
-  backgroundColor: '#fff',
-};
-  
- const productsContainerStyle = {
-  maxWidth: '1200px',
-  margin: '0 auto',
-  padding: '0 1rem',
-};
-  
- const productsTitleStyle = {
-  fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', // Responsive font size
-  color: '#541354',
-  textAlign: 'center',
-  marginBottom: '0.5rem',
-};
-  
- const productsSubtitleStyle = {
-  fontSize: 'clamp(1rem, 2vw, 1.1rem)', // Responsive font size
-  color: '#666',
-  textAlign: 'center',
-  marginBottom: '2rem',
-};
-  
-const productsGridStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-  gap: '1.5rem',
-  justifyContent: 'center', /* Centers the grid items */
-  marginBottom: '2rem',
-  '@media (max-width: 768px)': {
-    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))'
-  },
-  '@media (max-width: 480px)': {
-    gridTemplateColumns: '1fr', /* Single column on mobile */
-    maxWidth: '300px',
-    margin: '0 auto' /* Center the grid container */
-  }
-};
-const productCardStyle = {
-  backgroundColor: '#fff',
-  borderRadius: '10px',
-  overflow: 'hidden',
-  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
-  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-  ':hover': {
-    transform: 'translateY(-5px)',
-    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)'
-  },
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%', // Make card take full width of grid cell
-  '@media (max-width: 768px)': {
-    maxWidth: '100%'
-  },
-  '@media (max-width: 480px)': {
-    maxWidth: '100%'
-  }
-};
-const productImageStyle = {
-  width: '100%',
-  height: '120px',
-  backgroundColor: '#f5f5f5',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  overflow: 'hidden',
-  '@media (max-width: 480px)': {
-    height: '140px'
-  }
-};
-// Keep these existing styles as they are
-const productContentStyle = {
-  padding: '1rem',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  textAlign: 'center',
-  width: '100%'
-};
-
-  const productNameStyle = {
-    fontSize: '1rem',
-    color: '#541354',
-     margin: '0.5rem 1rem',
-  };
-  
-  const productDescStyle = {
-     fontSize: '0.8rem',
-    color: '#666',
-      margin: '0 1rem 0.5rem', 
-  minHeight: '30px', 
-  };
-  
-  const productPriceStyle = {
-    fontSize: '1.3rem',
-    fontWeight: 'bold',
-    color: '#FF9800',
-    margin: '0 1rem 1rem',
-  };
-  
-  const productButtonStyle = {
-    display: 'block',
-    padding: '0.5rem',
-    backgroundColor: '#541354',
-    color: 'white',
-    textAlign: 'center',
-    textDecoration: 'none',
-    margin: '0 1rem 1rem',
-    borderRadius: '5px',
-    transition: 'background-color 0.3s ease',
-    ':hover': {
-      backgroundColor: '#541354'
-    }
-  };
-  
- const viewMoreContainerStyle = {
-    textAlign: 'center',
-    marginTop: '0.5rem',
-    marginBottom: '2rem',
-};
-  
-  const viewMoreButtonStyle = {
-    display: 'inline-block',
-    padding: '12px 30px',
-    background: "linear-gradient(90deg, #FF6B35, #F8B500)",
-    color: 'white',
-    textDecoration: 'none',
-    borderRadius: '30px',
-    fontWeight: 'bold',
-    fontSize: '1rem',
-    transition: 'all 0.3s ease',
-    boxShadow: '0 4px 15px rgba(255, 152, 0, 0.4)',
-    border: '2px solid #FF9800',
-    ':hover': {
-      backgroundColor: '#F57C00',
-      transform: 'translateY(-2px)',
-      boxShadow: '0 6px 20px rgba(255, 152, 0, 0.6)'
-    }
-  };
-
-  // Footer Styles
-const footerStyle = {
-    backgroundColor: '#541354',
-    color: 'white',
-    padding: '4rem 2rem 0',
-  };
-  
-  const footerContainerStyle = {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '2rem',
-    paddingBottom: '2rem',
-  };
-  
-  const footerColumnStyle = {
-    marginBottom: '2rem',
-  };
-  
-  const footerLogoStyle = {
-    height: '50px',
-    width: '50px',
-    borderRadius: '50%',
-    objectFit: 'cover',
-    border: '2px solid #FF9800',
-  };
-  
-  const companyNameStyle = {
-    fontSize: '1.5rem',
-    margin: '0.5rem 0',
-    color: 'white',
-  };
-  
-  const footerTextStyle = {
-    fontSize: '0.9rem',
-    lineHeight: '1.6',
-    color: '#e0e0e0',
-    margin: '0.5rem 0',
-  };
-  
-  const footerHeadingStyle = {
-    fontSize: '1.2rem',
-    marginBottom: '1.5rem',
-    position: 'relative',
-    paddingBottom: '0.5rem',
-    color: 'white',
-  };
-  
-  const footerListStyle = {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-  };
-  
-  const footerListItemStyle = {
-    marginBottom: '0.8rem',
-    display: 'flex',
-    alignItems: 'flex-start',
-    gap: '0.5rem',
-  };
-  
-  const footerLinkStyle = {
-    color: '#e0e0e0',
-    textDecoration: 'none',
-    fontSize: '0.9rem',
-    transition: 'color 0.3s ease',
-    ':hover': {
-      color: '#FF9800',
-    }
-  };
-  
-  const socialIconsStyle = {
-    display: 'flex',
-    gap: '1rem',
-    marginTop: '1rem',
-  };
-  
-  const socialIconLinkStyle = {
-    color: 'white',
-    backgroundColor: '#541354',
-    borderRadius: '50%',
-    width: '36px',
-    height: '36px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'all 0.3s ease',
-    ':hover': {
-      backgroundColor: '#FF9800',
-      transform: 'translateY(-3px)',
-    }
-  };
-  
-  const socialIconStyle = {
-    fontSize: '1rem',
-  };
-  
-  const contactIconStyle = {
-     fontSize: '1.3rem',
-    color: '#FF9800',
-  };
-  
-  const listIconStyle = {
-    fontSize: '0.8rem',
-    color: '#FF9800',
-    marginTop: '4px',
-  };
-  
-  const newsletterFormStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.5rem',
-  };
-  
-  const newsletterInputStyle = {
-    padding: '0.8rem',
-    borderRadius: '5px',
-    border: 'none',
-    fontSize: '0.9rem',
-  };
-  
-  const newsletterButtonStyle = {
-    padding: '0.8rem',
-    backgroundColor: '#FF9800',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    fontWeight: 'bold',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '0.5rem',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    ':hover': {
-      backgroundColor: '#F57C00',
-    }
-  };
-  
-  const sendIconStyle = {
-    fontSize: '1rem',
-  };
-  
-  const copyrightStyle = {
-    borderTop: '1px solid #541354',
-    padding: '1.5rem 0',
-    textAlign: 'center',
-  };
-  
-  const copyrightTextStyle = {
-    fontSize: '0.9rem',
-    color: '#e0e0e0',
-    margin: '0 0 1rem',
-  };
-  
-  const footerLinksStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: '1rem',
-    flexWrap: 'wrap',
-  };
-  
-  const footerBottomLinkStyle = {
-    color: '#e0e0e0',
-    textDecoration: 'none',
-    fontSize: '0.8rem',
-    transition: 'color 0.3s ease',
-    ':hover': {
-      color: '#FF9800',
-    }
-  };
-  
-  const dividerStyle = {
-    color: '#541354',
-  };
-
-  // Safety Tips Section Styles
-const safetySectionStyle = {
-  padding: '0.25rem 0.5rem',
-  backgroundColor: '#f8f9fa',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
-  backgroundAttachment: 'fixed', // Optional: parallax effect
-};
-  
-  const safetyContainerStyle = {
-    maxWidth: '1200px',
-    height:'75%',
-    margin: '0 auto',
-    
-  };
-  
-  const safetyTitleStyle = {
-    fontSize: '2.5rem',
-    color: '#541354',
-    textAlign: 'center',
-    marginBottom: '0.5rem',
-  };
-  
-  const safetySubtitleStyle = {
-    fontSize: '1.1rem',
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: '3rem',
-  };
-  
-  const safetyGridStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-  gap: '1.5rem',
-  rowGap: '1rem',
-  margin: '0 auto 2rem',
-  maxWidth: '1200px',
-  padding: '0 1rem',
-  '@media (max-width: 768px)': {
-    gridTemplateColumns: 'repeat(2, 1fr))'
-  },
-  '@media (max-width: 480px)': {
-    gridTemplateColumns: '1fr',
-    gap: '1rem'
-  }
-};
- 
-  
-  const safetyCardStyle = {
-   background: "linear-gradient(135deg, #FFF7E6 0%, #FFE0B2 50%, #FFCC80 100%)",
-    borderRadius: '8px',
-    padding: '1rem',
-    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.05)',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-    ':hover': {
-      transform: 'translateY(-5px)',
-      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)'
-    },
-     height: '85%', 
-      display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  };
-  
-  const safetyIconContainer = {
-    justifyContent:'center',
-    backgroundColor: '#FF980020',
-      width: '40px',
-  height: '40px', 
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '0.8rem',
-  };
-  
-  const safetyIconStyle = {
-    fontSize: '1.3rem',
-    color: '#FF9800',
-  };
-  
-  const safetyTipTitle = {
-    fontSize: '1rem',
-    color: '#541354',
-    marginBottom: '1rem',
-
-  };
-  
-  const safetyTipText = {
-    fontSize: '0.85rem',
-    color: '#555',
-    lineHeight: '1.6',
-      textAlign: 'center', // This centers the text horizontally
-  width: '100%'
-  };
-  
-  const safetyButtonContainer = {
-    textAlign: 'center',
-    marginTop: '0.5rem',
-    marginBottom: '2rem', 
-  };
-  
-  const safetyButtonStyle = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    padding: '12px 30px',
-    background: "linear-gradient(90deg, #FF6B35, #F8B500)",
-    color: 'white',
-    textDecoration: 'none',
-    borderRadius: '30px',
-    fontWeight: 'bold',
-    fontSize: '1rem',
-    transition: 'all 0.3s ease',
-    boxShadow: '0 4px 15px rgba(255, 152, 0, 0.4)',
-    border: '2px solid #FF9800',
-    ':hover': {
-      backgroundColor: '#F57C00',
-      transform: 'translateY(-2px)',
-      boxShadow: '0 6px 20px rgba(255, 152, 0, 0.6)'
-    }
-  };
-  
-  const buttonIconStyle = {
-    fontSize: '1.2rem',
-  };
-
-  // Contact Us Section Styles
-const contactSectionStyle = {
-    padding: '1rem,1rem',
-    backgroundColor: '#fff',
-    
-    
-  };
-  
-const contactContainerStyle = {
-  maxWidth: '1200px',
-  height: '50%',
-  margin: '0 auto',
-boxShadow: '0 10px 25px rgba(84, 19, 84, 0.2)',
-  borderRadius: '12px', // Optional: adds rounded corners
-  padding: '2rem', // Add some padding
-  backgroundColor: '#fff', // Ensure background is white
-};
-  
-  const contactHeaderStyle = {
-    textAlign: 'center',
-    marginBottom: '3rem',
-  };
-  
-  const contactTitleStyle = {
-    fontSize: '2.5rem',
-    color: '#541354',
-    marginBottom: '0.5rem',
-    marginTop: '0.5rem',
-  };
-  
-  const contactSubtitleStyle = {
-    fontSize: '1.1rem',
-    color: '#666',
-    maxWidth: '600px',
-    margin: '0 auto',
-    
-  };
-  
-  
- const contactContentStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-  gap: '2rem',
-  margin: '0 auto',
-  maxWidth: '1200px',
-  padding: '0 1rem',
-  '@media (max-width: 768px)': {
-    gridTemplateColumns: '1fr',
-    gap: '1.5rem'
-  }
-};
-
-const contactInfoStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-  gap: '1.5rem',
-  alignContent: 'start',
-  '@media (max-width: 500px)': {
-    gridTemplateColumns: '1fr'
-  }
-};
-
-const contactCardStyle = {
-  backgroundColor: '#FFF9F0',
-  borderRadius: '10px',
-  padding: '1.5rem',
-  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.08)',
-  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-  height: '70%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  textAlign: 'left',
-  
-  ':hover': {
-    transform: 'translateY(-5px)',
-    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.12)'
-  }
-};
-
-const contactIconWrapper = {
-   justifyContent:'center',
-    backgroundColor: '#FF980020',
-      width: '40px',
-  height: '40px', 
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '0.8rem',
-};
-
-const contactCardTitle = {
-  fontSize: '1.1rem',
-  color: '#541354',
-  marginBottom: '0.8rem',
-  fontWeight: '600'
-};
-
-const contactCardText = {
-  fontSize: '0.85rem',
-  color: '#555',
-  lineHeight: '1.6',
-  margin: 0
-};
-  
-  const contactFormStyle = {
-  backgroundColor: 'white',
-  borderRadius: '10px',
-  padding: '1.5rem', // Increased from 0.5rem for better spacing
-  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.05)',
-  height: 'auto', // Changed from fixed 91.75% to auto
-  display: 'flex',
-  flexDirection: 'column',
-  '@media (max-width: 480px)': {
-    padding: '1rem'
-  }
-};
-  
-  
-const formStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '0.8rem',
-  width: '100%', // Ensure form takes full width
-};
-  
-  const formGroupStyle = {
-    marginBottom: '0.2rem',
-  };
-  
-  const inputStyle = {
-  width: '100%', // Changed from 80% to 100%
-  padding: '0.5rem 0.8rem',
-  borderRadius: '5px',
-  border: '1px solid #ddd',
-  fontSize: '0.85rem',
-  transition: 'all 0.3s ease',
-  boxSizing: 'border-box', // Ensure padding doesn't affect width
-  ':focus': {
-    outline: 'none',
-    borderColor: '#541354',
-    boxShadow: '0 0 0 2px rgba(26, 35, 126, 0.1)',
-  }
-};
-  
-  const selectStyle = {
-    ...inputStyle,
-    appearance: 'none',
-    backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,<svg width=\'12\' height=\'12\' viewBox=\'0 0 4 5\' xmlns=\'http://www.w3.org/2000/svg\'><path fill=\'%23333\' d=\'M2 0L0 2h4zm0 5L0 3h4z\'/></svg>")',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'right 1rem center',
-    backgroundSize: '8px 10px',
-  };
-  
- const textareaStyle = {
-  width: '100%', // Ensure full width
-  padding: '0.5rem 0.8rem',
-  borderRadius: '5px',
-  border: '1px solid #ddd',
-  fontSize: '0.85rem',
-  transition: 'all 0.3s ease',
-  boxSizing: 'border-box',
-  resize: 'vertical',
-  ':focus': {
-    outline: 'none',
-    borderColor: '#541354',
-    boxShadow: '0 0 0 2px rgba(26, 35, 126, 0.1)',
-  }
-};
-  
-const submitButtonStyle = {
-  width: '100%', // Changed from fixed 500px to 100%
-  maxWidth: '500px', // Add max-width to prevent it from getting too wide
-  margin: '0 auto', // Center the button
-  padding: '0.8rem 1.5rem',
-  backgroundColor: '#541354',
-  color: 'white',
-  border: 'none',
-  borderRadius: '5px',
-  fontSize: '1rem',
-  fontWeight: 'bold',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '0.5rem',
-  transition: 'all 0.3s ease',
-  ':hover': {
-    backgroundColor: '#541354',
-    transform: 'translateY(-2px)',
-  },
-  '@media (max-width: 768px)': {
-    width: '100%',
-    maxWidth: '100%' // Allow full width on tablets
-  },
-  '@media (max-width: 480px)': {
-    width: '100%',
-    maxWidth: '100%', // Full width on mobile
-    margin: '0 auto',
-    padding: '0.7rem 1rem'
-  }
-};
-  
-  const submitIconStyle = {
-    fontSize: '1rem',
-    '@media (max-width: 768px)': {
-  width: '100%'
-},
-'@media (max-width: 480px)': {
-  width: '100%',
-  maxWidth: '200px',
-  margin: '0 auto',
-  padding: '0.7rem 1rem'
-}
-  };
-  
-  const mapContainerStyle = {
-    marginTop: '4rem',
-    borderRadius: '10px',
-    overflow: 'hidden',
-    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
-  };
-  
-  const mapStyle = {
-    width: '100%',
-    height: '400px',
-    border: 'none',
-  };
-
-  const popupOverlayStyle = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 1001,
-    padding: '20px',
-  };
-  
-  const popupContainerStyle = {
-    backgroundColor: '#fff',
-    borderRadius: '10px',
-    boxShadow: '0 5px 25px rgba(0, 0, 0, 0.3)',
-    maxWidth: '600px',
-    width: '100%',
-    overflow: 'hidden',
-  };
-  
-  const popupHeaderStyle = {
-    backgroundColor: '#541354',
-    color: '#fff',
-    padding: '15px 20px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  };
-  
-  const popupTitleStyle = {
-    margin: 0,
-    fontSize: '1.2rem',
-  };
-  
-  const popupCloseButtonStyle = {
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: '#fff',
-    fontSize: '1.5rem',
-    cursor: 'pointer',
-    padding: '0 5px',
-  };
-  
-  const popupContentStyle = {
-    padding: '20px',
-    maxHeight: '60vh',
-    overflowY: 'auto',
-  };
-  
-  const popupTextStyle = {
-    marginBottom: '15px',
-    lineHeight: '1.5',
-    color: '#333',
-  };
-  
-  const popupFooterStyle = {
-    padding: '15px 20px',
-    display: 'flex',
-    justifyContent: 'flex-end',
-    borderTop: '1px solid #eee',
-  };
-  
-  const popupAcceptButtonStyle = {
-    backgroundColor: '#541354',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    padding: '8px 20px',
-    cursor: 'pointer',
-    fontSize: '1rem',
-    transition: 'all 0.3s ease',
-    ':hover': {
-      backgroundColor: '#541354',
-    }
-  };
-  
 export default Home;

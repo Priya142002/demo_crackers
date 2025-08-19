@@ -116,7 +116,7 @@ achievementsSection: {
 
   achievementIcon: {
     width: "70px",
-    height: "70px",
+    height: "50px",
     margin: "0 auto 20px",
     display: "flex",
     alignItems: "center",
@@ -127,8 +127,8 @@ achievementsSection: {
   },
 
   achievementNumber: {
-    fontSize: "2.8rem",
-    fontWeight: "800",
+    fontSize: "2.3rem",
+    fontWeight: "700",
     color: "#FF6B6B",
     margin: "0 0 10px 0",
     background: "linear-gradient(135deg, #FF6B6B, #FF8E53)",
