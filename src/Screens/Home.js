@@ -1,13 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import logo from "../assets/logo.jpg";
-import hero_bg from "../assets/pro_bg.jpg";
+import hero_bg from "../assets/saveimg.jpg";
 import pro_img from "../assets/firecracker_img.webp";
-import new_img from  "../assets/fire crackers image2.webp";
-import new_img2 from  "../assets/fireworks.webp";
-import new_img3 from "../assets/fire racker image4.webp";
+import new_img from  "../assets/fountain.jpeg";
+import new_img2 from  "../assets/skypalce.jpeg";
+import new_img3 from "../assets/wheel.jpg";
 import new_img4 from "../assets/fire cracker img 5.jpg";
-import about_img from "../assets/about_img.webp";
+import about_img from "../assets/aboutusimg.jpg";
 import Header from './HeaderLayouts';
 import Footer from './FooterLayouts';
 import pro_img2 from"../assets/fire gif.webp";
@@ -824,7 +824,7 @@ const heroButtonContainer = {
 // Update the heroButtonStyle to ensure no borders
 const heroButtonStyle = {
   padding: '12px 30px',
-  backgroundColor: '#3949AB',
+  backgroundColor: '#541354',
   color: 'white',
   textDecoration: 'none',
   borderRadius: '30px',
@@ -898,8 +898,10 @@ const heroInfoBox = {
 const aboutSectionStyle = {
   padding: '1rem',
   backgroundColor: '#f9f9f9',
+boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)',
   '@media (max-width: 480px)': {
-    padding: '1rem 0.5rem'
+    padding: '1rem 0.5rem',
+    boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)'
   }
 };
   
@@ -910,17 +912,26 @@ const aboutContainerStyle = {
   flexWrap: 'wrap',
   gap: '3rem',
   alignItems: 'center',
+  background: 'rgba(255, 255, 255, 0.9)',
+  borderRadius: '20px',
+  padding: '3rem 2rem',
+boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)',
+  border: '1px solid rgba(84, 19, 84, 0.1)',
+  backdropFilter: 'blur(10px)',
   '@media (max-width: 768px)': {
     flexDirection: 'column',
     gap: '2rem',
-    padding: '0 1rem'
+    padding: '2rem 1rem',
+  boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)'
   },
   '@media (max-width: 480px)': {
     gap: '1.5rem',
-    padding: '0'
+    padding: '1.5rem 1rem',
+    borderRadius: '15px',
+   boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)'
   }
 };
-  
+
   const aboutContentStyle = {
   flex: '1 1 45%',
   minWidth: '300px',
@@ -931,7 +942,7 @@ const aboutContainerStyle = {
 };
   const aboutTitleStyle = {
   fontSize: '2.5rem',
-  color: '#1a237e',
+  color: '#541354',
   marginBottom: '1.5rem',
   position: 'relative',
   textAlign: 'center', // Center the title on all screens
@@ -1023,7 +1034,7 @@ const aboutStatsContainer = {
   backgroundColor: 'white',
   padding: '1.5rem',
   borderRadius: '8px',
-  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.05)',
+  boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)',
   '@media (max-width: 480px)': {
     flex: '1 1 120px',
     padding: '1rem',
@@ -1039,7 +1050,7 @@ const aboutStatsContainer = {
   const aboutStatNumber = {
     fontSize: '1.8rem',
     margin: '0',
-    color: '#1a237e',
+    color: '#541354',
   };
   
   const aboutStatText = {
@@ -1085,7 +1096,7 @@ const productsSectionStyle = {
   
  const productsTitleStyle = {
   fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', // Responsive font size
-  color: '#1a237e',
+  color: '#541354',
   textAlign: 'center',
   marginBottom: '0.5rem',
 };
@@ -1157,7 +1168,7 @@ const productContentStyle = {
 
   const productNameStyle = {
     fontSize: '1rem',
-    color: '#1a237e',
+    color: '#541354',
      margin: '0.5rem 1rem',
   };
   
@@ -1178,7 +1189,7 @@ const productContentStyle = {
   const productButtonStyle = {
     display: 'block',
     padding: '0.5rem',
-    backgroundColor: '#1a237e',
+    backgroundColor: '#541354',
     color: 'white',
     textAlign: 'center',
     textDecoration: 'none',
@@ -1186,7 +1197,7 @@ const productContentStyle = {
     borderRadius: '5px',
     transition: 'background-color 0.3s ease',
     ':hover': {
-      backgroundColor: '#3949AB'
+      backgroundColor: '#541354'
     }
   };
   
@@ -1217,7 +1228,7 @@ const productContentStyle = {
 
   // Footer Styles
 const footerStyle = {
-    backgroundColor: '#1a237e',
+    backgroundColor: '#541354',
     color: 'white',
     padding: '4rem 2rem 0',
   };
@@ -1295,7 +1306,7 @@ const footerStyle = {
   
   const socialIconLinkStyle = {
     color: 'white',
-    backgroundColor: '#3949AB',
+    backgroundColor: '#541354',
     borderRadius: '50%',
     width: '36px',
     height: '36px',
@@ -1360,7 +1371,7 @@ const footerStyle = {
   };
   
   const copyrightStyle = {
-    borderTop: '1px solid #3949AB',
+    borderTop: '1px solid #541354',
     padding: '1.5rem 0',
     textAlign: 'center',
   };
@@ -1389,7 +1400,7 @@ const footerStyle = {
   };
   
   const dividerStyle = {
-    color: '#3949AB',
+    color: '#541354',
   };
 
   // Safety Tips Section Styles
@@ -1406,7 +1417,7 @@ const safetySectionStyle = {
   
   const safetyTitleStyle = {
     fontSize: '2.5rem',
-    color: '#1a237e',
+    color: '#541354',
     textAlign: 'center',
     marginBottom: '0.5rem',
   };
@@ -1471,7 +1482,7 @@ const safetySectionStyle = {
   
   const safetyTipTitle = {
     fontSize: '1rem',
-    color: '#1a237e',
+    color: '#541354',
     marginBottom: '1rem',
 
   };
@@ -1536,7 +1547,7 @@ const contactSectionStyle = {
   
   const contactTitleStyle = {
     fontSize: '2.5rem',
-    color: '#1a237e',
+    color: '#541354',
     marginBottom: '0.5rem',
     marginTop: '0.5rem',
   };
@@ -1604,7 +1615,7 @@ const contactIconWrapper = {
 
 const contactCardTitle = {
   fontSize: '1.1rem',
-  color: '#1a237e',
+  color: '#541354',
   marginBottom: '0.8rem',
   fontWeight: '600'
 };
@@ -1651,7 +1662,7 @@ const formStyle = {
   boxSizing: 'border-box', // Ensure padding doesn't affect width
   ':focus': {
     outline: 'none',
-    borderColor: '#1a237e',
+    borderColor: '#541354',
     boxShadow: '0 0 0 2px rgba(26, 35, 126, 0.1)',
   }
 };
@@ -1676,7 +1687,7 @@ const formStyle = {
   resize: 'vertical',
   ':focus': {
     outline: 'none',
-    borderColor: '#1a237e',
+    borderColor: '#541354',
     boxShadow: '0 0 0 2px rgba(26, 35, 126, 0.1)',
   }
 };
@@ -1686,7 +1697,7 @@ const submitButtonStyle = {
   maxWidth: '500px', // Add max-width to prevent it from getting too wide
   margin: '0 auto', // Center the button
   padding: '0.8rem 1.5rem',
-  backgroundColor: '#1a237e',
+  backgroundColor: '#541354',
   color: 'white',
   border: 'none',
   borderRadius: '5px',
@@ -1699,7 +1710,7 @@ const submitButtonStyle = {
   gap: '0.5rem',
   transition: 'all 0.3s ease',
   ':hover': {
-    backgroundColor: '#3949AB',
+    backgroundColor: '#541354',
     transform: 'translateY(-2px)',
   },
   '@media (max-width: 768px)': {
@@ -1764,7 +1775,7 @@ const submitButtonStyle = {
   };
   
   const popupHeaderStyle = {
-    backgroundColor: '#1a237e',
+    backgroundColor: '#541354',
     color: '#fff',
     padding: '15px 20px',
     display: 'flex',
@@ -1806,7 +1817,7 @@ const submitButtonStyle = {
   };
   
   const popupAcceptButtonStyle = {
-    backgroundColor: '#1a237e',
+    backgroundColor: '#541354',
     color: '#fff',
     border: 'none',
     borderRadius: '5px',
@@ -1815,7 +1826,7 @@ const submitButtonStyle = {
     fontSize: '1rem',
     transition: 'all 0.3s ease',
     ':hover': {
-      backgroundColor: '#3949AB',
+      backgroundColor: '#541354',
     }
   };
   
