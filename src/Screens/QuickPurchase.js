@@ -8,7 +8,7 @@ import { jsPDF } from "jspdf";
 import localforage from 'localforage';
 import Header from './HeaderLayouts';
 import Footer from './FooterLayouts';
-import quick_image from '../assets/quick_image.jpg';
+import quick_image from '../assets/quick.jpg';
 import API_BASE_URL from "./apiConfig";
  
 function QuickPurchase() {
@@ -793,7 +793,7 @@ if (formData.email) {
     textAlign: 'center',
     padding: '0.6rem 0',
     backgroundColor: '#E6E9F8',
-    color: '#2F3E9E',
+    color: '#541354',
   },
   cardTitle: {
     margin: 0,
@@ -899,7 +899,7 @@ if (formData.email) {
     color: '#1e293b',
   },
   proceedButton: {
-    backgroundColor: '#2F3E9E',
+    backgroundColor: '#541354',
     color: 'white',
     padding: isMobile ? '0.5rem 0.5rem' : '0.5rem 1.1rem',
     border: 'none',
@@ -974,7 +974,7 @@ if (formData.email) {
   sectionTitle: {
     fontSize: isMobile ? '0.9rem' : '0.95rem',
     fontWeight: 600,
-    color: '#2F3E9E',
+    color: '#541354',
     marginBottom: '0.5rem',
     paddingBottom: '0.4rem',
     borderBottom: '1px solid #e2e8f0',
@@ -1231,7 +1231,7 @@ if (formData.email) {
             style={{
               width: '18px',
               height: '18px',
-              accentColor: '#1a237e',
+              accentColor: '#541354',
               borderRadius: '4px',
             }}
           />

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import logo from "../assets/logo.jpg";
-import hero_bg from "../assets/saveimg.jpg";
+import hero_bg from "../assets/imgbg.jpg";
 import pro_img from "../assets/firecracker_img.webp";
 import new_img from  "../assets/fountain.jpeg";
 import new_img2 from  "../assets/skypalce.jpeg";
@@ -267,70 +267,17 @@ function Home() {
 */}
    {/* Hero Section */}
 <section style={{...heroSectionStyle, backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${hero_bg})`}}>
- <div style={{
-  position: 'absolute',
-  left: '0%',
-  top: '70%',
-  transform: 'translateY(-50%)',
-  zIndex: 1,
-  '@media (max-width: 768px)': {
-    display: 'none' // Hide on mobile to save space
-  }
-}}>
+
    
-      <img 
-        src={pro_img2} 
-        alt="Animated fireworks" 
-        style={{
-          width: '250px',
-          height: '250px',
-          objectFit: 'contain',
-          borderRadius: '15px',
-         
-          '@media (max-width: 768px)': {
-            width: '150px',
-            height: '150px'
-          }
-        }} 
-      />
-    </div>
-  <div style={{
-    position: 'absolute',
-    right: '0%',
-    top: '15%',
-    transform: 'translateY(-50%)',
-    zIndex: 1,
-    '@media (max-width: 768px)': {
-      right: '5%',
-      width: '150px'
-    }
-  }}>
-   
-      <img 
-        src={pro_img2} 
-        alt="Animated fireworks" 
-        style={{
-          width: '250px',
-          height: '250px',
-          objectFit: 'contain',
-          borderRadius: '15px',
-         
-          '@media (max-width: 768px)': {
-            width: '150px',
-            height: '150px'
-          }
-        }} 
-      />
-    </div>
   <div style={heroContentStyle}>
-    <h1 style={heroTitleStyle}>SRI GOKILAA CRACKERS</h1>
+    <h1 style={heroTitleStyle}>DEMO CRACKERS</h1>
     <p style={heroSubtitleStyle}>
-       firecracker specialists with over a decade of excellence in manufacturing, retailing, and wholesale distribution
+       Big sparks. Bright moments. Trusted quality.
     </p>
    
     <div style={heroButtonContainer}>
       <Link to="/product" style={heroButtonStyle}>
-        Explore Products
+        Shop Trusted Crackers
       </Link>
      
     </div>
@@ -342,16 +289,16 @@ function Home() {
 <section style={aboutSectionStyle}>
   <div style={aboutContainerStyle}>
     <div style={aboutContentStyle}>
-      <h2 style={aboutTitleStyle}>About Sri Gokilaa Crackers</h2>
+      <h2 style={aboutTitleStyle}>About Demo Crackers</h2>
       <div style={aboutTextContainer}>
         <p style={aboutTextStyle}>
-          We,Sri Gokilaa Crackers, based in Virudhunagar, the Cracker City of Tamilnadu. We are the agency to sell all fireworks crackers based upon the customer orders.
+          We,Demo Crackers, based in Virudhunagar, the Cracker City of Tamilnadu. We are the agency to sell all fireworks crackers based upon the customer orders.
         </p>
         <p style={aboutTextStyle}>
           We are in the field of crackers for more than a decade. We are one of the Largest Manufacturer, Retailer & Wholesalers of crackers in Virudhunagar. We procure the crackers well in advance during the best sun drying months of March, April and May to serve the customers with high quality products at the most competitive price.
         </p>
         <p style={aboutTextStyle}>
-          At Sri Gokilaa Crackers, we're committed to offering quality products, unparalleled service and the most competitive prices in town. Great service begins with great people and industry experience, which is why our staff is made up of the best and most qualified in the business.
+          At Demo Crackers, we're committed to offering quality products, unparalleled service and the most competitive prices in town. Great service begins with great people and industry experience, which is why our staff is made up of the best and most qualified in the business.
         </p>
         <div style={{ textAlign: 'center' }}>
         <Link to="/about" style={learnMoreButtonStyle}>
@@ -460,7 +407,7 @@ function Home() {
 {/* Safety Tips Section */}
 <section style={safetySectionStyle}>
   <div style={safetyContainerStyle}>
-    <h2 style={safetyTitleStyle}>Firecracker Safety Tips</h2>
+    <h2 style={safetyTitleStyle}>Your Safety, Our Priority</h2>
     <p style={safetySubtitleStyle}>Enjoy festivals safely with these important precautions</p>
     
     <div style={safetyGridStyle}>
@@ -551,7 +498,7 @@ function Home() {
 <section style={contactSectionStyle}>
   <div style={contactContainerStyle}>
     <div style={contactHeaderStyle}>
-      <h2 style={contactTitleStyle}>Get In Touch</h2>
+      <h2 style={contactTitleStyle}>Let’s Connect</h2>
       <p style={contactSubtitleStyle}>We'd love to hear from you! Reach out for inquiries, orders, or partnerships.</p>
     </div>
 
@@ -764,9 +711,10 @@ const navLinkHoverStyle = {
 const heroSectionStyle = {
   position: 'relative',
   height: '60vh',
-  
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
+  backgroundSize: 'cover',           // Ensures the image covers the area
+  backgroundPosition: 'center',      // Centers the image
+  backgroundRepeat: 'no-repeat',     // Prevents tiling
+  backgroundAttachment: 'fixed',     // Optional: parallax effect
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -774,14 +722,6 @@ const heroSectionStyle = {
   color: 'white',
   textAlign: 'center',
   padding: '1rem 2rem',
-  '@media (max-width: 768px)': {
-    height: '80vh',
-    padding: '1rem'
-  },
-  '@media (max-width: 480px)': {
-    height: '90vh',
-    padding: '0.5rem'
-  }
 };
 
 const heroContentStyle = {
@@ -789,16 +729,19 @@ const heroContentStyle = {
   maxWidth: '800px'
 };
 
-// Update heroTitleStyle for mobile
 const heroTitleStyle = {
-  fontSize: 'clamp(2.5rem, 8vw, 4rem)',
-  color: '#fff',
-  marginBottom: '1.5rem',
-  position: 'relative',
+  fontSize: 'clamp(2.3rem, 6vw, 4rem)',
+  background: 'linear-gradient(90deg, #FFD700, #FFA500, #FF8C00)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text',
+  textFillColor: 'transparent',
   textAlign: 'center',
-  '@media (max-width: 480px)': {
-    fontSize: 'clamp(2rem, 6vw, 3rem)'
-  }
+  marginBottom: '1rem',
+  fontWeight: 'bold',
+  textShadow: '0 0 10px rgba(255, 165, 0, 0.3)',
+  position: 'relative',
+  display: 'inline-block',
 };
 
 const heroSubtitleStyle = {
@@ -824,7 +767,7 @@ const heroButtonContainer = {
 // Update the heroButtonStyle to ensure no borders
 const heroButtonStyle = {
   padding: '12px 30px',
-  backgroundColor: '#541354',
+ background: "linear-gradient(90deg, #FF6B35, #F8B500)",
   color: 'white',
   textDecoration: 'none',
   borderRadius: '30px',
@@ -871,7 +814,7 @@ const heroInfoBox = {
     padding: '1rem',
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: '10px',
-    backdropFilter: 'blur(5px)'
+ 
   };
   
   const heroInfoItem = {
@@ -915,20 +858,19 @@ const aboutContainerStyle = {
   background: 'rgba(255, 255, 255, 0.9)',
   borderRadius: '20px',
   padding: '3rem 2rem',
-boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)',
+  boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)',
   border: '1px solid rgba(84, 19, 84, 0.1)',
-  backdropFilter: 'blur(10px)',
   '@media (max-width: 768px)': {
     flexDirection: 'column',
     gap: '2rem',
     padding: '2rem 1rem',
-  boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)'
+    boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)'
   },
   '@media (max-width: 480px)': {
     gap: '1.5rem',
     padding: '1.5rem 1rem',
     borderRadius: '15px',
-   boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)'
+    boxShadow: '0 20px 60px rgba(255, 152, 0, 0.15), 0 8px 25px rgba(255, 152, 0, 0.1)'
   }
 };
 
@@ -1063,7 +1005,7 @@ const aboutStatsContainer = {
   display: 'block', // Change to block to enable margin auto
   margin: '1rem auto 0', // Auto horizontally, 1rem top margin
   padding: '12px 30px',
-  backgroundColor: '#FF9800',
+ background: "linear-gradient(90deg, #FF6B35, #F8B500)",
   color: 'white',
   width: "100px",
   textDecoration: 'none',
@@ -1210,7 +1152,7 @@ const productContentStyle = {
   const viewMoreButtonStyle = {
     display: 'inline-block',
     padding: '12px 30px',
-    backgroundColor: '#FF9800',
+    background: "linear-gradient(90deg, #FF6B35, #F8B500)",
     color: 'white',
     textDecoration: 'none',
     borderRadius: '30px',
@@ -1405,14 +1347,19 @@ const footerStyle = {
 
   // Safety Tips Section Styles
 const safetySectionStyle = {
-    padding: '0.25rem 0.5rem',
-    backgroundColor: '#f8f9fa',
-  };
+  padding: '0.25rem 0.5rem',
+  backgroundColor: '#f8f9fa',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+  backgroundAttachment: 'fixed', // Optional: parallax effect
+};
   
   const safetyContainerStyle = {
     maxWidth: '1200px',
     height:'75%',
     margin: '0 auto',
+    
   };
   
   const safetyTitleStyle = {
@@ -1448,7 +1395,7 @@ const safetySectionStyle = {
  
   
   const safetyCardStyle = {
-    backgroundColor: 'white',
+   background: "linear-gradient(135deg, #FFF7E6 0%, #FFE0B2 50%, #FFCC80 100%)",
     borderRadius: '8px',
     padding: '1rem',
     boxShadow: '0 5px 15px rgba(0, 0, 0, 0.05)',
@@ -1506,7 +1453,7 @@ const safetySectionStyle = {
     alignItems: 'center',
     gap: '0.5rem',
     padding: '12px 30px',
-    backgroundColor: '#FF9800',
+    background: "linear-gradient(90deg, #FF6B35, #F8B500)",
     color: 'white',
     textDecoration: 'none',
     borderRadius: '30px',
@@ -1534,11 +1481,15 @@ const contactSectionStyle = {
     
   };
   
-  const contactContainerStyle = {
-    maxWidth: '1200px',
-    height: '50%',
-    margin: '0 auto',
-  };
+const contactContainerStyle = {
+  maxWidth: '1200px',
+  height: '50%',
+  margin: '0 auto',
+boxShadow: '0 10px 25px rgba(84, 19, 84, 0.2)',
+  borderRadius: '12px', // Optional: adds rounded corners
+  padding: '2rem', // Add some padding
+  backgroundColor: '#fff', // Ensure background is white
+};
   
   const contactHeaderStyle = {
     textAlign: 'center',
@@ -1585,7 +1536,7 @@ const contactInfoStyle = {
 };
 
 const contactCardStyle = {
-  backgroundColor: 'white',
+  backgroundColor: '#FFF9F0',
   borderRadius: '10px',
   padding: '1.5rem',
   boxShadow: '0 5px 15px rgba(0, 0, 0, 0.08)',
@@ -1595,6 +1546,7 @@ const contactCardStyle = {
   flexDirection: 'column',
   alignItems: 'flex-start',
   textAlign: 'left',
+  
   ':hover': {
     transform: 'translateY(-5px)',
     boxShadow: '0 10px 25px rgba(0, 0, 0, 0.12)'
