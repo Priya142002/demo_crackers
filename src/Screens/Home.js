@@ -109,26 +109,29 @@ function Home() {
 
     return {
       // Popup
-      popupOverlay: {
-        position: 'fixed',
-        top: 0, left: 0, right: 0, bottom: 0,
-        backgroundColor: 'rgba(0,0,0,0.85)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-        padding: '20px',
-      },
-      popupContainer: {
-        backgroundColor: '#fff',
-        borderRadius: '16px',
-        maxWidth: '500px',
-        width: '100%',
-        overflow: 'hidden',
-        boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
-      },
+    popupOverlay: {
+  position: 'fixed',
+  top: 0, left: 0, right: 0, bottom: 0,
+  backgroundColor: 'rgba(0,0,0,0.85)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 1000,
+  padding: isMobile ? '10px' : '20px', // Less padding on mobile
+},
+    popupContainer: {
+  backgroundColor: '#fff',
+  borderRadius: isMobile ? '14px' : '16px',
+  maxWidth: isMobile ? '95vw' : '500px',
+  width: '100%',
+  overflow: 'hidden',
+  boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+  display: 'flex',
+  flexDirection: 'column',
+  maxHeight: isMobile ? '90vh' : 'auto', // Prevent overflow on small screens
+},
       popupHeader: {
-        background: 'linear-gradient(135deg, #541354, #8E24AA)',
+       background: 'linear-gradient(90deg, #FF6B35, #F8B500)',
         color: 'white',
         padding: '20px',
         display: 'flex',
@@ -140,33 +143,51 @@ function Home() {
         fontSize: '1.4rem',
         fontWeight: '600',
       },
-      closeButton: {
-        background: 'none',
-        border: 'none',
-        color: 'white',
-        fontSize: '1.6rem',
-        cursor: 'pointer',
-      },
-      popupContent: {
-        padding: '30px 20px',
-        lineHeight: 1.7,
-        color: '#333',
-        textAlign: 'center',
-      },
-      acceptButton: {
-        display: 'block',
-        width: '100%',
-        padding: '16px',
-        background: 'linear-gradient(90deg, #FF6B35, #F8B500)',
-        color: 'white',
-        border: 'none',
-        fontSize: '1.1rem',
-        fontWeight: '600',
-        cursor: 'pointer',
-        textAlign: 'center',
-        borderRadius: '0 0 16px 16px',
-      },
-
+     closeButton: {
+  background: 'rgba(255, 255, 255, 0.2)',
+  border: 'none',
+  color: 'white',
+  fontSize: '1.5rem',
+  width: '40px',
+  height: '40px',
+  borderRadius: '50%',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.3s',
+},
+closeButtonHover: {
+  background: 'rgba(255, 255, 255, 0.3)',
+  transform: 'scale(1.1)',
+},
+     popupContent: {
+  padding: isMobile ? '20px 16px' : '30px 20px',
+  lineHeight: 1.7,
+  color: '#333',
+  textAlign: 'center',
+  fontSize: isMobile ? '0.95rem' : '1rem',
+  flex: 1, // This makes it grow and push button down
+},
+     acceptButton: {
+  display: 'block',
+  width: '100%',
+  padding: '16px',
+  background: 'linear-gradient(90deg, #FF6B35, #F8B500)',
+  color: 'white',
+  border: 'none',
+  fontSize: '1.1rem',
+  fontWeight: '600',
+  cursor: 'pointer',
+  textAlign: 'center',
+  borderRadius: '0 0 16px 16px',
+  transition: 'all 0.3s',
+},
+acceptButtonHover: {
+  background: 'linear-gradient(90deg, #E55A2B, #D8A000)',
+  transform: 'translateY(-2px)',
+  boxShadow: '0 6px 15px rgba(255, 107, 53, 0.6)',
+},
       // Hero
       heroSection: {
         height: '90vh',
@@ -535,28 +556,188 @@ function Home() {
       <Header />
 
       {/* === Popup === */}
-      {isRenderPopup && (
-        <div style={styles.popupOverlay}>
-          <div style={styles.popupContainer}>
-            <div style={styles.popupHeader}>
-              <h3 style={styles.popupTitle}>Legal Notice</h3>
-              <button onClick={handleClose} style={styles.closeButton}>
-                <FiX />
-              </button>
-            </div>
-            <div style={styles.popupContent}>
-
-  <p><strong>Note:     </strong> As per Supreme Court guidelines (2018), crackers cannot be sold directly online.</p>
-  <p>Submit your list through the <strong>Estimate Page</strong> — we’ll confirm your order by call.</p>
-  <p>We follow all <strong>safety norms & eco-friendly practices</strong> for your celebrations.</p>
-</div>
-
-            <button onClick={handleClose} style={styles.acceptButton}>
-              <FiCheck /> I Accept
-            </button>
+     {isRenderPopup && (
+  <div style={{
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+    opacity: isVisible ? 1 : 0,
+    transition: 'opacity 0.3s ease',
+    pointerEvents: isVisible ? 'auto' : 'none',
+  }}>
+    <div style={{
+      backgroundColor: '#fff',
+      borderRadius: '12px',
+      width: '90%',
+      maxWidth: '600px',
+      overflow: 'hidden',
+      boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
+      transform: isVisible ? 'scale(1)' : 'scale(0.95)',
+      transition: 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+    }}>
+      
+      {/* Header with #ff4057 color theme */}
+      <div style={{
+          background: "linear-gradient(90deg, #FF6B35, #F8B500)",
+        color: 'white',
+        padding: '20px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center',
+          gap: '15px'
+        }}>
+          <div style={{
+            background: 'rgba(255,255,255,0.3)',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+          }}>
+            <FiAlertTriangle size={20} />
           </div>
+          <h2 style={{ 
+            margin: 0, 
+            fontSize: '1.25rem', 
+            fontWeight: '600',
+            lineHeight: '1.4'
+          }}>
+            Important Notice
+          </h2>
         </div>
-      )}
+        <button 
+          onClick={handleClose}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'white',
+            fontSize: '1.5rem',
+            cursor: 'pointer',
+            padding: '5px',
+            transition: 'transform 0.2s ease',
+            ':hover': {
+              transform: 'rotate(90deg)'
+            }
+          }}
+        >
+          <FiX />
+        </button>
+      </div>
+
+      {/* Content */}
+      <div style={{ 
+        padding: '25px',
+        maxHeight: '60vh', 
+        overflowY: 'auto',
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+        }}>
+          <p style={{
+            margin: 0,
+            color: '#333',
+            lineHeight: '1.6',
+            fontSize: '1rem',
+          }}>
+            As per 2018 Supreme Court Order, online sale of firecrackers is NOT permitted. 
+            We value our customers and at the same time, we respect the jurisdiction.
+          </p>
+          
+          <p style={{
+            margin: 0,
+            color: '#333',
+            lineHeight: '1.6',
+            fontSize: '1rem',
+          }}>
+            We request our customers to:
+          </p>
+          
+          <ul style={{
+            margin: 0,
+            paddingLeft: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+          }}>
+            <li>Select your products in the Estimate Page to see your estimation</li>
+            <li>Submit the required crackers through the Get Estimate Button</li>
+          </ul>
+          
+          <p style={{
+            margin: 0,
+            color: '#333',
+            lineHeight: '1.6',
+            fontSize: '1rem',
+          }}>
+            We will contact you within 2 hours and confirm the order through phone call. 
+            Please add and submit your enquiries and enjoy your Diwali with NEW CRACKERS.
+          </p>
+          
+          <p style={{
+            margin: 0,
+            color: '#333',
+            lineHeight: '1.6',
+            fontSize: '1rem',
+          }}>
+            NEW CRACKERS is a shop following 100% legal & statutory compliances and 
+            all our shops, go-downs are maintained as per the explosive acts. We send 
+            the parcels through registered and legal transport service providers.
+          </p>
+        </div>
+      </div>
+
+      {/* Footer with #ff4057 color theme */}
+      <div style={{
+        padding: '20px',
+        textAlign: 'center',
+        borderTop: '1px solid #f0f0f0',
+        background: '#f9f9f9',
+      }}>
+        <button
+          onClick={handleClose}
+          style={{
+              background: "linear-gradient(90deg, #FF6B35, #F8B500)",
+            color: 'white',
+            border: 'none',
+            borderRadius: '30px',
+            padding: '12px 30px',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            boxShadow: '0 4px 15px rgba(255, 64, 87, 0.3)',
+            transition: 'all 0.3s ease',
+            ':hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: '0 6px 20px rgba(255, 64, 87, 0.4)',
+                background: "linear-gradient(90deg, #FF6B35, #F8B500)",
+            }
+          }}
+        >
+          <FiCheck />
+          I Understand
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* === Hero === */}
       <section style={styles.heroSection}>
